@@ -3,7 +3,7 @@ package com.pppp.currencies
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.pppp.currencies.network.client.RetrofitClient
+import com.pppp.currencies.data.network.client.RetrofitClient
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
