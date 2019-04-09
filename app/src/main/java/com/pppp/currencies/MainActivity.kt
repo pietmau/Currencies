@@ -3,7 +3,9 @@ package com.pppp.currencies
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.pppp.currencies.data.mapper.RxMapperImpl
 import com.pppp.currencies.data.network.client.RetrofitClient
+import com.pppp.currencies.domain.usecases.RxGetRatesUseCase
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -41,7 +43,16 @@ class MainActivity : AppCompatActivity() {
                 Flowable.just(it)
             }, 1)
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { Log.e("foo", "reciveed " + it) }
+        //  .subscribe { Log.e("foo", "reciveed " + it) }
+
+        val z =
+            RxGetRatesUseCase(RxMapperImpl(RetrofitClient(cacheDir = this.cacheDir))).subscribe("EUR",
+                {
+                    Log.e("foo", it.toString())
+                },
+                {
+
+                })
     }
 
     private fun rand(): Long {

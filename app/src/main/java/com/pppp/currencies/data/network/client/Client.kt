@@ -4,12 +4,12 @@ import io.reactivex.Observable
 
 interface Client {
 
-    suspend fun getRates(base: String): Map<String?, Double?>
+    suspend fun getRates(base: String): Map<String, Double>
 
-    suspend fun getNames(): Map<String?, String?>
+    suspend fun getNames(): Map<String, String>
 
-    fun getRatesObservable(base: String): Observable<Map<String?, Double?>>
+    fun getRatesObservable(base: String): Observable<Map<String, Double>>
 
-    fun getNamesObservable(): Observable<Map<String?, String?>>
+    fun getNamesObservable(): Observable<Map<String, String>>
 
 }

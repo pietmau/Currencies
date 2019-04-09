@@ -4,6 +4,13 @@ import com.pppp.currencies.data.pokos.Rate
 
 
 interface GetRatesUseCase {
-    fun subscribe(observer: (Rate) -> Unit)
+
+    fun subscribe(
+        base: String,
+        success: ((List<Rate>) -> Unit)? = null,
+        failure: ((Throwable) -> Unit)? = null
+    )
+
     fun unSubscribe()
+
 }

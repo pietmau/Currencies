@@ -1,13 +1,13 @@
 package com.pppp.currencies.data.network.api
 
-import io.reactivex.Observable
+import io.reactivex.Flowable
 import retrofit2.http.GET
 
 interface NamesApi {
 
     @GET("api/currencies.json")
-    suspend fun getNames(): Map<String?, String?>
+    suspend fun getNames(): Map<String, String>
 
     @GET("api/currencies.json")
-    fun getNamesObservable(): Observable<Map<String?, String?>>
+    fun getNamesObservable(): Flowable<Map<String, String>>
 }

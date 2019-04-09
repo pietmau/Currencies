@@ -29,3 +29,9 @@ h
 8app/src/main/java/com/pppp/currencies/data/pokos/Rate.kt,b/a/ba00c3450bb2c4c41971a8dfe2063a69a9dd941e
 x
 Happ/src/main/java/com/pppp/currencies/domain/usecases/GetRatesUseCase.kt,f/8/f8f142a2180e77bb92b5eb9ee505b1b846cf7e74
+m
+=app/src/main/java/com/pppp/currencies/data/mapper/RxMapper.kt,d/8/d829e17ab6e00730031a32272b51e935dc35d79c
+q
+Aapp/src/main/java/com/pppp/currencies/data/mapper/RxMapperImpl.kt,1/c/1cf16c54e3f03278fa8bd4f087b1bdc7df91613c
+z
+Japp/src/main/java/com/pppp/currencies/domain/usecases/RxGetRatesUseCase.kt,5/b/5b41cdc8fc8f6b76df40a0c184468616b41df4c6
