@@ -10,7 +10,7 @@ interface GetRatesUseCase {
 
     fun subscribe(
         base: Observable<String>,
-        success: ((List<Rate>) -> Unit)?,
-        failure: ((Throwable) -> Unit)?
+        success: ((List<Rate>) -> Unit)? = null,
+        failure: ((Throwable) -> Unit)? = null
     )
 }

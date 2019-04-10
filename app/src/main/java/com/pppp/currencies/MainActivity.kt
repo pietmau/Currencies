@@ -1,15 +1,16 @@
 package com.pppp.currencies
 
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.pppp.currencies.data.mapper.RxMapperImpl
 import com.pppp.currencies.data.network.client.RetrofitClient
 import com.pppp.currencies.domain.usecases.RxGetRatesUseCase
+import com.pppp.currencies.presentation.viewmodel.RxRatesViewModel
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -23,7 +24,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val client = RetrofitClient(cacheDir = cacheDir)
+        val client = RetrofitClient(cacheDirectory = cacheDir)
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 //val result = client.getRates("EUR")
@@ -46,21 +47,36 @@ class MainActivity : AppCompatActivity() {
             .observeOn(AndroidSchedulers.mainThread())
         //.subscribe { Log.e("foo", "reciveed " + it) }
 
-        val z =
-            RxGetRatesUseCase(RxMapperImpl(RetrofitClient(cacheDir = this.cacheDir))).subscribe(
-                Observable.interval(3, TimeUnit.SECONDS).zipWith(Observable.just("EUR", "GBP"),
-                    BiFunction { time: Long, symbol: String -> symbol }),
-                {
-                    Log.e("foo", it.toString())
-                },
-                {
+//        val z =
+//            RxGetRatesUseCase(RxMapperImpl(RetrofitClient(cacheDir = this.cacheDir))).subscribe(
+//                Observable.interval(3, TimeUnit.SECONDS).zipWith(Observable.just("EUR", "GBP"),
+//                    BiFunction { time: Long, symbol: String -> symbol }),
+//                {
+//                    Log.e("foo", it.toString())
+//                },
+//                {
+//
+//                })
 
-                })
+        val rxRatesViewModel =
+            RxRatesViewModel(RxGetRatesUseCase(RxMapperImpl(RetrofitClient(cacheDirectory = cacheDir))))
+        rxRatesViewModel
+            .subscribe(this.lifecycle, {
+                Log.e("foo", it.toString())
+            })
+        rxRatesViewModel.setBase("EUR")
+        Handler().postDelayed({
+            rxRatesViewModel.setBase("GBP")
+            rxRatesViewModel.unsubscribe()
+        }, 3 * 1000)
+        Handler().postDelayed({
+            rxRatesViewModel.subscribe()
+        }, 3 * 1000)
     }
 
     private fun rand(): Long {
         val nextLong = Random.nextLong(5 * 1000)
-        Log.e("foo", "sleeping " + nextLong)
+        Log.d("foo", "sleeping " + nextLong)
         return nextLong
     }
 

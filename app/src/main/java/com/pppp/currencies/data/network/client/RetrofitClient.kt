@@ -14,13 +14,13 @@ import java.io.File
 class RetrofitClient(
     ratesBaseUrl: String = "https://revolut.duckdns.org",
     namesBaseUrl: String = "https://openexchangerates.org",
-    cacheDir: File
+    cacheDirectory: File
 ) :
     Client {
 
     private val interceptor =
         HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
-    private val cache = Cache(cacheDir, 10 * 1024 * 1024)
+    private val cache = Cache(cacheDirectory, 10 * 1024 * 1024)
     private val client = OkHttpClient.Builder()
         .cache(cache)
         .addInterceptor(interceptor)
