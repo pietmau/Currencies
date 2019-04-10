@@ -9,6 +9,7 @@ import com.pppp.currencies.domain.usecases.RxGetRatesUseCase
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -43,10 +44,12 @@ class MainActivity : AppCompatActivity() {
                 Flowable.just(it)
             }, 1)
             .observeOn(AndroidSchedulers.mainThread())
-        //  .subscribe { Log.e("foo", "reciveed " + it) }
+        //.subscribe { Log.e("foo", "reciveed " + it) }
 
         val z =
-            RxGetRatesUseCase(RxMapperImpl(RetrofitClient(cacheDir = this.cacheDir))).subscribe("EUR",
+            RxGetRatesUseCase(RxMapperImpl(RetrofitClient(cacheDir = this.cacheDir))).subscribe(
+                Observable.interval(3, TimeUnit.SECONDS).zipWith(Observable.just("EUR", "GBP"),
+                    BiFunction { time: Long, symbol: String -> symbol }),
                 {
                     Log.e("foo", it.toString())
                 },
