@@ -1,6 +1,7 @@
 package com.pppp.currencies.presentation.view
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import com.pppp.currencies.R
 import com.pppp.currencies.di.DaggerRatesComponent
 import com.pppp.currencies.di.RatesModule
 import com.pppp.currencies.presentation.viewmodel.RatesViewModel
+import kotlinx.android.synthetic.main.rates_fragment.*
 import javax.inject.Inject
 
 
@@ -24,8 +26,12 @@ class RatesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.subscribe(requireActivity().lifecycle, {
-
+            recycler.setRates(it)
         })
+        Handler().postDelayed({
+            viewModel.changeBase("GBP")
+        }, 10 * 1000)
+
     }
 
     override fun onCreateView(
