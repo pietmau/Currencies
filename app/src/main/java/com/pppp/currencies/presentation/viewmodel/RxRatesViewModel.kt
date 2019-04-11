@@ -13,15 +13,16 @@ class RxRatesViewModel(private val useCase: GetRatesUseCase) : ViewModel(), Rate
     private val data: MutableLiveData<List<Rate>> = MutableLiveData()
     private val subject: Subject<String> = BehaviorSubject.create()
 
-    fun subscribe(lifecycle: Lifecycle, callback: (t: List<Rate>) -> Unit) {
+    override fun subscribe(lifecycle: Lifecycle, callback: (t: List<Rate>) -> Unit) {
         data.observe({ lifecycle }, callback)
         lifecycle.addObserver(this)
     }
 
-    fun changeBase(base: String) {
+    override fun changeBase(base: String) {
         subject.onNext(base)
     }
 
+    //TODO remove
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun subscribe() {
         useCase.subscribe(base = subject, success = {
@@ -29,6 +30,7 @@ class RxRatesViewModel(private val useCase: GetRatesUseCase) : ViewModel(), Rate
         })
     }
 
+    //TODO remove
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     fun unsubscribe() {
         useCase.unSubscribe()

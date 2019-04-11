@@ -27,7 +27,7 @@ class RxGetRatesUseCase(
     override fun subscribe(
         base: Observable<String>, success: ((List<Rate>) -> Unit)?, failure: ((Throwable) -> Unit)?
     ) {
-        subscription = base.switchMap {
+        subscription = base.startWith("EUR").switchMap {
             logger.d(TAG, "New base! -> $it")
             getRates(it)
         }
