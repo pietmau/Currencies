@@ -1,4 +1,4 @@
-package com.pppp.currencies.di
+package com.pppp.currencies.app.di
 
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel

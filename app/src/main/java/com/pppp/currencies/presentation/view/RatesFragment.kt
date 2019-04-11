@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.pppp.currencies.R
-import com.pppp.currencies.di.DaggerRatesComponent
-import com.pppp.currencies.di.RatesModule
+import com.pppp.currencies.app.di.DaggerRatesComponent
+import com.pppp.currencies.app.di.RatesModule
 import com.pppp.currencies.presentation.viewmodel.RatesViewModel
 import kotlinx.android.synthetic.main.rates_fragment.*
 import javax.inject.Inject

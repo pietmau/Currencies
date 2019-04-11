@@ -1,4 +1,4 @@
-package com.pppp.currencies.di
+package com.pppp.currencies.app.di
 
 import com.pppp.currencies.presentation.view.RatesFragment
 import dagger.Component

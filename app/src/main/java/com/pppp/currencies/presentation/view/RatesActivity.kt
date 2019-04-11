@@ -1,9 +1,8 @@
-package com.pppp.currencies.presentation
+package com.pppp.currencies.presentation.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.pppp.currencies.R
-import com.pppp.currencies.presentation.view.RatesFragment
 
 
 class RatesActivity : AppCompatActivity() {

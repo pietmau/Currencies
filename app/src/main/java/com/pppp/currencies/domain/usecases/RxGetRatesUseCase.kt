@@ -2,8 +2,8 @@ package com.pppp.currencies.domain.usecases
 
 import com.pppp.currencies.data.mapper.RxMapper
 import com.pppp.currencies.data.pokos.Rate
-import com.pppp.currencies.logger.Logger
-import com.pppp.currencies.logger.LoggerImpl
+import com.pppp.currencies.app.logger.Logger
+import com.pppp.currencies.app.logger.LoggerImpl
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Scheduler

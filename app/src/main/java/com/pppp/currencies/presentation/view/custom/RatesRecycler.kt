@@ -18,7 +18,6 @@ class RatesRecycler @JvmOverloads constructor(
 
     init {
         layoutManager = LinearLayoutManager(context)
-        adapter = RatesAdapter()
     }
 
     fun setRates(rates: List<Rate>) {

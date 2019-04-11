@@ -1,4 +1,4 @@
-package com.pppp.currencies.logger
+package com.pppp.currencies.app.logger
 
 import android.util.Log
 import com.pppp.currencies.BuildConfig

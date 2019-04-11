@@ -5,6 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/flag"
+        android:layout_width="@dimen/image_size"
+        android:layout_height="96dp"
+        app:civ_border_color="@android:color/transparent"
+        app:civ_border_width="@dimen/image_size"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <TextView
         android:id="@+id/symbol"
         android:layout_width="match_parent"
