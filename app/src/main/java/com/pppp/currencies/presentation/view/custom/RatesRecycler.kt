@@ -14,10 +14,11 @@ class RatesRecycler @JvmOverloads constructor(
     RecyclerView(context, attrs, defStyle) {
 
     private val ratesAdapter: RatesAdapter?
-        get() = adapter as RatesAdapter
+        get() = adapter as? RatesAdapter
 
     init {
         layoutManager = LinearLayoutManager(context)
+        adapter = RatesAdapter()
     }
 
     fun setRates(rates: List<Rate>) {

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.pppp.currencies.data.mapper.RxMapper
 import com.pppp.currencies.data.mapper.RxMapperImpl
+import com.pppp.currencies.data.mapper.UrlCreator
 import com.pppp.currencies.data.network.client.Client
 import com.pppp.currencies.data.network.client.RetrofitClient
 import com.pppp.currencies.domain.usecases.GetRatesUseCase
@@ -26,7 +27,7 @@ class RatesModule(private val activity: FragmentActivity) {
     internal fun providesUseCase(mapper: RxMapper): GetRatesUseCase = RxGetRatesUseCase(mapper)
 
     @Provides
-    internal fun provideMapper(client: Client): RxMapper = RxMapperImpl(client)
+    internal fun provideMapper(client: Client): RxMapper = RxMapperImpl(client, UrlCreator())
 
     @Provides
     internal fun provideClient(): Client = RetrofitClient(cacheDirectory = activity.cacheDir)

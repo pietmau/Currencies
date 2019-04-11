@@ -40,13 +40,13 @@ class RetrofitClient(
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .build().create(NamesApi::class.java)
 
-    override suspend fun getRates(base: String): Map<String, Double> =
+    override suspend fun getRatesXXX(base: String): Map<String, Double> =
         ratesApi.getRates(base).rates ?: emptyMap()
 
-    override suspend fun getNames() = namesApi.getNames()
+    override suspend fun getNamesXXX() = namesApi.getNames()
 
-    override fun getRatesObservable(base: String): Observable<Map<String, Double>> =
+    override fun getRates(base: String): Observable<Map<String, Double>> =
         ratesApi.getRatesObservable(base).toObservable().map { it.rates ?: emptyMap() }
 
-    override fun getNamesObservable() = namesApi.getNamesObservable().toObservable()
+    override fun getNames() = namesApi.getNamesObservable().toObservable()
 }
