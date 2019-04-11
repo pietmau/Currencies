@@ -29,7 +29,6 @@ class RetrofitClient(
     private val ratesApi = Retrofit.Builder()
         .baseUrl(ratesBaseUrl)
         .client(client)
-        //.addConverterFactory(RatesConverter())TODO
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .addConverterFactory(GsonConverterFactory.create())
         .build().create(RatesApi::class.java)

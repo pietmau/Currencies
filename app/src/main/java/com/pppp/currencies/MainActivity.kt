@@ -64,9 +64,9 @@ class MainActivity : AppCompatActivity() {
             .subscribe(this.lifecycle, {
                 Log.e("foo", it.toString())
             })
-        rxRatesViewModel.setBase("EUR")
+        rxRatesViewModel.changeBase("EUR")
         Handler().postDelayed({
-            rxRatesViewModel.setBase("GBP")
+            rxRatesViewModel.changeBase("GBP")
             rxRatesViewModel.unsubscribe()
         }, 3 * 1000)
         Handler().postDelayed({

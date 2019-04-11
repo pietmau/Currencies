@@ -11,6 +11,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import java.util.concurrent.TimeUnit
 
+// TODO retry on error!
+/**
+ * Emission does not happen on the main thread, because we start//TODO
+ */
 class RxGetRatesUseCase(
     private val mapper: RxMapper,
     private val mainScheduler: Scheduler = AndroidSchedulers.mainThread(),
