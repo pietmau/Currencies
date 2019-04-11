@@ -1,7 +1,6 @@
 package com.pppp.currencies.presentation.view
 
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,10 +27,6 @@ class RatesFragment : Fragment() {
         viewModel.subscribe(requireActivity().lifecycle, {
             recycler.setRates(it)
         })
-        Handler().postDelayed({
-            viewModel.changeBase("GBP")
-        }, 10 * 1000)
-
     }
 
     override fun onCreateView(
