@@ -25,12 +25,17 @@ class RxGetRatesUseCase(
     private val TAG = RxGetRatesUseCase::class.simpleName
 
     override fun subscribe(
+        // Gets the symbols from the user (if they change)
         base: Observable<String>, success: ((List<Rate>) -> Unit)?, failure: ((Throwable) -> Unit)?
     ) {
-        subscription = base.startWith("EUR").switchMap {
-            logger.d(TAG, "New base! -> $it")
-            getRates(it)
-        }
+        subscription = base
+            // In any case starts with EUR
+            .startWith("EUR")
+            // Every time the base change it restarts polling the rates
+            .switchMap {
+                logger.d(TAG, "New base! -> $it")
+                getRates(it)
+            }
             .observeOn(mainScheduler)
             .subscribe({
                 success?.invoke(it)
@@ -40,6 +45,8 @@ class RxGetRatesUseCase(
     }
 
     private fun getRates(base: String) =
+    // Implements backpressure management because it polls from the network very often,
+    // and there will be errors, delays, etc
         Flowable.interval(1, TimeUnit.SECONDS)
             .onBackpressureDrop()
             .flatMap({

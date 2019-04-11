@@ -4,4 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.pppp.currencies.presentation.view.custom.RatesRecycler
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </com.pppp.currencies.presentation.view.custom.RatesRecycler>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
