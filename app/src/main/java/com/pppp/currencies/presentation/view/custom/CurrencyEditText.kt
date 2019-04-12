@@ -5,14 +5,12 @@ import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatEditText
 
 
-class CurrencyEditText @JvmOverloads constructor(
+class CurrencyEditText constructor(
     context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : AppCompatEditText(context, attrs, defStyleAttr) {
+    attrs: AttributeSet
+) : AppCompatEditText(context, attrs) {
 
     init {
-        inputType = android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL
         filters = arrayOf(DecimalDigitsInputFilter(4, 2))
     }
 }

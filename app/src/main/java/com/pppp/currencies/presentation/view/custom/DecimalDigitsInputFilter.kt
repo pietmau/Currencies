@@ -18,5 +18,4 @@ class DecimalDigitsInputFilter(digitsBeforeZero: Int, digitsAfterZero: Int) : In
         dend: Int
     ) =
         if (!pattern.matcher(dest).matches()) "" else null
-
 }
