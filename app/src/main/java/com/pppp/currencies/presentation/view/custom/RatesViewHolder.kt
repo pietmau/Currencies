@@ -9,9 +9,12 @@ import kotlinx.android.synthetic.main.holder_rates.view.*
 class RatesViewHolder(val view: View, private val imageLoader: ImageLoader) :
     RecyclerView.ViewHolder(view) {
 
-    fun bind(rate: Rate) {
+    fun bind(rate: Rate, clickListener: (Int) -> Unit) {
         itemView.symbol.text = rate.symbol
         itemView.country.text = rate.country
         imageLoader.loadImage(rate.url, itemView.flag)
+        itemView.setOnClickListener {
+            clickListener(adapterPosition)
+        }
     }
 }
