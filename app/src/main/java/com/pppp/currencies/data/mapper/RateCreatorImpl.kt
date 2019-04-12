@@ -7,7 +7,7 @@ import com.pppp.currencies.data.rates.RatesResponse
 class RateCreatorImpl(private val urlCreator: UrlCreator = UrlCreator()) : RateCreator {
 
     override fun createRates(response: RatesResponse, names: Map<String, String>) =
-        // The base rate is the first one
+    // The base rate is the first one
         listOf(createBaseRate(response, names))
             .plus(response.rates.map { entry -> createRate(entry, names) })
 
