@@ -16,9 +16,7 @@ class RxMapperImpl(private val client: Client, private val rateCreator: RateCrea
                     // We flatmap to get all the map entries one by one
                     .map { response ->
                         // We must not forget the base currency
-                        response.rates
-                            .map { entry -> rateCreator.createRate(entry, names) }
-                           // .plus(rateCreator.createBaseRate(response))
+                        rateCreator.createRates(response, names)
                     }
 
             }
