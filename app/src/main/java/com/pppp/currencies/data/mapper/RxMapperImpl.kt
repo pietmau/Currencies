@@ -2,25 +2,25 @@ package com.pppp.currencies.data.mapper
 
 import com.pppp.currencies.data.network.client.Client
 import com.pppp.currencies.data.pokos.Rate
+import io.reactivex.Observable
 
 
-class RxMapperImpl(private val client: Client, private val urlCreator: UrlCreator) : RxMapper {
+class RxMapperImpl(private val client: Client, private val rateCreator: RateCreator) : RxMapper {
 
-    override fun getRates(base: String) =
-    // OKHttp is caching the names for us, therefore it is OK to call it every time
-        client.getNames()
+    override fun getRates(base: String): Observable<List<Rate>> {
+        // OKHttp is caching the names for us, therefore it is OK to call it every time
+        return client.getNames()
             .flatMap { names ->
                 // Now we get the rates as a map
                 client.getRates(base)
                     // We flatmap to get all the map entries one by one
-                    .flatMapIterable { it.entries }
-                    .map { entry -> createRate(entry, names) }
-            }.toList()
+                    .map { response ->
+                        // We must not forget the base currency
+                        response.rates
+                            .map { entry -> rateCreator.createRate(entry, names) }
+                           // .plus(rateCreator.createBaseRate(response))
+                    }
 
-    private fun createRate(entry: Map.Entry<String, Double>, names: Map<String, String>): Rate {
-        val symbol = entry.key
-        val url = urlCreator.createUrl(symbol)
-        val countryName = names[symbol]
-        return Rate(symbol, entry.value, countryName, url)
+            }
     }
 }

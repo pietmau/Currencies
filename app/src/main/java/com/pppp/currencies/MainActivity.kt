@@ -1,14 +1,9 @@
 package com.pppp.currencies
 
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.pppp.currencies.data.mapper.RxMapperImpl
-import com.pppp.currencies.data.mapper.UrlCreator
 import com.pppp.currencies.data.network.client.RetrofitClient
-import com.pppp.currencies.domain.usecases.RxGetRatesUseCase
-import com.pppp.currencies.presentation.viewmodel.RxRatesViewModel
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -59,20 +54,20 @@ class MainActivity : AppCompatActivity() {
 //
 //                })
 
-        val rxRatesViewModel =
-            RxRatesViewModel(RxGetRatesUseCase(RxMapperImpl(RetrofitClient(cacheDirectory = cacheDir), UrlCreator())))
-        rxRatesViewModel
-            .subscribe(this.lifecycle, {
-                Log.e("foo", it.toString())
-            })
-        rxRatesViewModel.changeBase("EUR")
-        Handler().postDelayed({
-            rxRatesViewModel.changeBase("GBP")
-            rxRatesViewModel.unsubscribe()
-        }, 3 * 1000)
-        Handler().postDelayed({
-            rxRatesViewModel.subscribe()
-        }, 3 * 1000)
+//        val rxRatesViewModel =
+//            RxRatesViewModel(RxGetRatesUseCase(RxMapperImpl(RetrofitClient(cacheDirectory = cacheDir), UrlCreator())))
+//        rxRatesViewModel
+//            .subscribe(this.lifecycle, {
+//                Log.e("foo", it.toString())
+//            })
+//        rxRatesViewModel.changeBase("EUR")
+//        Handler().postDelayed({
+//            rxRatesViewModel.changeBase("GBP")
+//            rxRatesViewModel.unsubscribe()
+//        }, 3 * 1000)
+//        Handler().postDelayed({
+//            rxRatesViewModel.subscribe()
+//        }, 3 * 1000)
     }
 
     private fun rand(): Long {

@@ -1,5 +1,6 @@
 package com.pppp.currencies.data.network.client
 
+import com.pppp.currencies.data.rates.RatesResponse
 import io.reactivex.Observable
 
 interface Client {
@@ -8,7 +9,7 @@ interface Client {
 
     suspend fun getNamesXXX(): Map<String, String>
 
-    fun getRates(base: String): Observable<Map<String, Double>>
+    fun getRates(base: String): Observable<RatesResponse>
 
     fun getNames(): Observable<Map<String, String>>
 

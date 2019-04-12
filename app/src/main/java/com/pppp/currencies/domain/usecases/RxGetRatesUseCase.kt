@@ -2,6 +2,7 @@ package com.pppp.currencies.domain.usecases
 
 import com.pppp.currencies.data.mapper.RxMapper
 import com.pppp.currencies.data.pokos.Rate
+import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Scheduler
@@ -44,9 +45,8 @@ class RxGetRatesUseCase(
     // Implements back pressure management because it polls from the network very often
         Flowable.interval(1, TimeUnit.SECONDS)
             // If we are too busy we drop all except the latest
-            .onBackpressureLatest()
             .flatMap({
-                mapper.getRates(base).toFlowable()
+                mapper.getRates(base).toFlowable(BackpressureStrategy.LATEST)
                 // Only one subscription at the time
             }, 1)
             .toObservable()

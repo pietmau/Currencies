@@ -6,11 +6,11 @@ import com.google.gson.annotations.SerializedName
 data class RatesResponse(
     @SerializedName("base")
     @Expose
-    var base: String? = null,
+    var base: String = "",
     @SerializedName("date")
     @Expose
-    var date: String? = null,
+    var date: String = "",
     @SerializedName("rates")
     @Expose
-    var rates: Map<String, Double>? = null
+    var rates: Map<String, Double> = emptyMap()
 )
