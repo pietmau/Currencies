@@ -5,8 +5,6 @@ Y
 build.gradle,f/0/f07866736216be0ee2aba49e392191aeae700a35
 >
 app/.gitignore,5/1/51e1c5d383dfaa35e0e7e5873a0a99355a86880f
-8
-READM.md,a/7/a792f498be72db202c47c079cc8dd2d57b0ec476
 P
  app/src/main/AndroidManifest.xml,8/c/8c55c3ccc257e5907959013f99656e4c8ec3903e
 @
@@ -35,3 +33,37 @@ q
 Aapp/src/main/java/com/pppp/currencies/data/mapper/RxMapperImpl.kt,1/c/1cf16c54e3f03278fa8bd4f087b1bdc7df91613c
 z
 Japp/src/main/java/com/pppp/currencies/domain/usecases/RxGetRatesUseCase.kt,5/b/5b41cdc8fc8f6b76df40a0c184468616b41df4c6
+j
+:app/src/main/java/com/pppp/currencies/app/logger/Logger.kt,3/c/3c9e48968e93a279804458698f6ef3d363533a9f
+n
+>app/src/main/java/com/pppp/currencies/app/logger/LoggerImpl.kt,e/5/e508484ce32cda299fa5a1b135090f4b2b5e9bff
+n
+>app/src/main/java/com/pppp/currencies/app/di/RatesComponent.kt,4/b/4b791c8d3e2beb877a53ee815111fb1d8fffcf37
+9
+	README.md,8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
+~
+Napp/src/main/java/com/pppp/currencies/presentation/viewmodel/RatesViewModel.kt,e/e/ee09db24ed0d9dbde319a5ab333cfd3d6f715cfd
+á
+Wapp/src/main/java/com/pppp/currencies/presentation/view/custom/RatesDiffUtilCallback.kt,7/0/7004042e6cc4013e66b948f22241d80a507230f3
+e
+5app/src/main/java/com/pppp/currencies/app/RatesApp.kt,5/3/5301807f40e3caca7feb9692447c84865a6dbfc4
+}
+Mapp/src/main/java/com/pppp/currencies/presentation/imageloader/ImageLoader.kt,0/e/0e98753c2aa54932de84b591d84fe29aa69bd655
+x
+Happ/src/main/java/com/pppp/currencies/presentation/view/RatesActivity.kt,e/3/e3d8cb668118400740cf80a18a1e8a28576369cc
+~
+Napp/src/main/java/com/pppp/currencies/presentation/view/custom/RatesAdapter.kt,3/6/36c93ce04f31acd131d71502d20637b33a8fc6bb
+k
+;app/src/main/java/com/pppp/currencies/app/di/RatesModule.kt,c/5/c5f99d51b24a4e518da0780f0f464ebd3b3171ee
+
+Oapp/src/main/java/com/pppp/currencies/presentation/view/custom/RatesRecycler.kt,a/b/abccafce76f6d8e203817ad1fe8ab382466766ed
+Å
+Qapp/src/main/java/com/pppp/currencies/presentation/view/custom/RatesViewHolder.kt,7/6/76b098cd5a53cf806913deeb593114cb1186d465
+o
+?app/src/main/java/com/pppp/currencies/data/mapper/UrlCreator.kt,b/6/b6cb60518a11474519d9d0466752401eaf8e2989
+x
+Happ/src/main/java/com/pppp/currencies/presentation/view/RatesFragment.kt,c/a/caaa65d35991d650492eafaebedce27bfceaf37a
+Ñ
+Tapp/src/main/java/com/pppp/currencies/presentation/imageloader/PicassoImageLoader.kt,0/9/09ee44e4c54a2242e994063eab6414f188f43a80
+Ä
+Papp/src/main/java/com/pppp/currencies/presentation/viewmodel/RxRatesViewModel.kt,e/4/e4e1c2ca3ededa4e441edbe4ffce6d3d2a4518e1

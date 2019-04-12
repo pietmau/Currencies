@@ -11,6 +11,6 @@ class RatesViewHolder(val view: View, private val imageLoader: ImageLoader) :
 
     fun bind(rate: Rate) {
         itemView.symbol.text = rate.symbol
-        imageLoader.loadImage("", itemView.flag)
+        imageLoader.loadImage(rate.url, itemView.flag)
     }
 }
