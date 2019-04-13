@@ -14,6 +14,7 @@ class RatesAdapter() : RecyclerView.Adapter<RatesViewHolder>() {
     private lateinit var recyclerView: RecyclerView
     private val imageLoader: ImageLoader = PicassoImageLoader()
     private val rates: MutableList<Rate> = mutableListOf()
+    lateinit var onSymbolSelected: (String) -> Unit
 
     override fun getItemCount() = rates.size
 
@@ -27,7 +28,7 @@ class RatesAdapter() : RecyclerView.Adapter<RatesViewHolder>() {
         holder.bind(rates[position], ::onItemClicked)
     }
 
-    fun setRates(rates: List<Rate>) {
+    fun updateRates(rates: List<Rate>) {
         val result = DiffUtil.calculateDiff(RatesDiffUtilCallback(rates, this.rates))
         this.rates.clear()
         this.rates.addAll(rates)
@@ -35,6 +36,7 @@ class RatesAdapter() : RecyclerView.Adapter<RatesViewHolder>() {
     }
 
     private fun onItemClicked(position: Int) {
+        onSymbolSelected(rates[position].symbol)
         val item = rates.removeAt(position)
         rates.add(0, item)
         notifyItemMoved(position, 0)

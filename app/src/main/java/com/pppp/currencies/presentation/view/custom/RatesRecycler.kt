@@ -13,15 +13,21 @@ class RatesRecycler @JvmOverloads constructor(
 ) :
     RecyclerView(context, attrs, defStyle) {
 
-    private val ratesAdapter: RatesAdapter?
-        get() = adapter as? RatesAdapter
+    var onCurrencySelected: ((String) -> Unit) = {}
+        set(value) {
+            ratesAdapter.onSymbolSelected = value
+        }
+
+    private val ratesAdapter: RatesAdapter
+        get() = adapter as RatesAdapter
 
     init {
         layoutManager = LinearLayoutManager(context)
         adapter = RatesAdapter()
     }
 
-    fun setRates(rates: List<Rate>) {
-        ratesAdapter?.setRates(rates)
+    fun updateRates(rates: List<Rate>) {
+        ratesAdapter.updateRates(rates)
     }
+
 }
