@@ -1,13 +1,14 @@
 package com.pppp.currencies.domain.usecases
 
 import com.pppp.currencies.data.mapper.RxMapper
-import com.pppp.currencies.data.pokos.Rate
+import com.pppp.currencies.data.pokos.Currency
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 
 // TODO retry on error!
@@ -25,15 +26,16 @@ class RxGetRatesUseCase(
     private var subscription: Disposable? = null
 
     override fun subscribe(
-        // Gets the symbols from the user (if they change)
-        base: Observable<String>, success: ((List<Rate>) -> Unit)?, failure: ((Throwable) -> Unit)?
+        // Gets the currency from the user (if they change)
+        baseCurrency: Observable<Pair<String, BigDecimal>>,
+        success: ((List<Currency>) -> Unit)?,
+        failure: ((Throwable) -> Unit)?
     ) {
-        subscription = base
-            // In any case we start with the default
-            .startWith(DEFAULT_CURRENCY)
-            // Every time the base changes it restarts polling the rates
-            .switchMap { base ->
-                getRates(base)
+        subscription = baseCurrency
+            .startWith(Pair(DEFAULT_CURRENCY, BigDecimal(1)))
+            // Every time the baseCurrency changes, it restarts polling the rates
+            .switchMap { (baseSymbol, baseAmount) ->
+                getRates(baseSymbol, baseAmount)
             }
             .observeOn(mainScheduler)
             .subscribe({
@@ -43,13 +45,12 @@ class RxGetRatesUseCase(
             })
     }
 
-    private fun getRates(base: String) =
+    private fun getRates(baseSymbol: String, baseAmount: BigDecimal) =
     // Implements back pressure management because it polls from the network very often
         Flowable.interval(1, TimeUnit.SECONDS)
-            // If we are too busy we drop all except the latest
             .flatMap({
-                mapper.getRates(base).toFlowable(BackpressureStrategy.LATEST)
-                // Only one subscription at the time
+                mapper.getRates(baseSymbol, baseAmount).toFlowable(BackpressureStrategy.LATEST)
+                // Flatmaps only one subscription at the time
             }, 1)
             .toObservable()
 

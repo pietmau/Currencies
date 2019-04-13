@@ -15,7 +15,7 @@
         <activity android:name=".MainActivity">
         </activity>
 
-        <activity android:name=".presentation.view.RatesActivity">
+        <activity android:name=".presentation.view.CurrenciesActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

@@ -4,7 +4,8 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.pppp.currencies.data.pokos.Rate
+import com.pppp.currencies.data.pokos.Currency
+import java.math.BigDecimal
 
 class RatesRecycler @JvmOverloads constructor(
     context: Context,
@@ -13,9 +14,9 @@ class RatesRecycler @JvmOverloads constructor(
 ) :
     RecyclerView(context, attrs, defStyle) {
 
-    var onCurrencySelected: ((String) -> Unit) = {}
+    var onCurrencyClicked: (String, BigDecimal) -> Unit = { _, _ -> }
         set(value) {
-            ratesAdapter.onSymbolSelected = value
+            ratesAdapter.onCurrencyClicked = value
         }
 
     private val ratesAdapter: RatesAdapter
@@ -26,8 +27,8 @@ class RatesRecycler @JvmOverloads constructor(
         adapter = RatesAdapter()
     }
 
-    fun updateRates(rates: List<Rate>) {
-        ratesAdapter.updateRates(rates)
+    fun updateRates(currencies: List<Currency>) {
+        ratesAdapter.updateRates(currencies)
     }
 
 }

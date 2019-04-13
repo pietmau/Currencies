@@ -9,13 +9,13 @@ import androidx.lifecycle.Observer
 import com.pppp.currencies.R
 import com.pppp.currencies.app.di.DaggerRatesComponent
 import com.pppp.currencies.app.di.RatesModule
-import com.pppp.currencies.presentation.viewmodel.RatesViewModel
+import com.pppp.currencies.presentation.viewmodel.CurrenciesViewModel
 import kotlinx.android.synthetic.main.rates_fragment.*
 import javax.inject.Inject
 
 
-class RatesFragment : Fragment() {
-    @Inject lateinit var viewModel: RatesViewModel
+class CurrenciesFragment : Fragment() {
+    @Inject lateinit var viewModel: CurrenciesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,8 +25,8 @@ class RatesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recycler.onCurrencySelected = {
-            viewModel.changeBase(it)
+        recycler.onCurrencyClicked = { baseSymbol, baseAmount ->
+            viewModel.changeBase(baseSymbol, baseAmount)
         }
         viewModel.data.observe(requireActivity(), Observer(recycler::updateRates))
     }
@@ -48,6 +48,6 @@ class RatesFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance() = RatesFragment()
+        fun newInstance() = CurrenciesFragment()
     }
 }

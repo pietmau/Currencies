@@ -1,4 +1,4 @@
 - USE A SERVICE!
 - HTTP chaching!!!
 - Fix edditezt to get only valid numbers
--
+- FIX NAMES (currency not rates)

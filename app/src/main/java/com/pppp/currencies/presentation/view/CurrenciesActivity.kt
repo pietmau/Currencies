@@ -5,14 +5,14 @@ import androidx.appcompat.app.AppCompatActivity
 import com.pppp.currencies.R
 
 
-class RatesActivity : AppCompatActivity() {
+class CurrenciesActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.rates_activity)
         if (savedInstanceState == null) {
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.add(R.id.container, RatesFragment.newInstance())
+            transaction.add(R.id.container, CurrenciesFragment.newInstance())
             transaction.commit()
         }
     }

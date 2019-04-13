@@ -1,7 +1,8 @@
 package com.pppp.currencies.domain.usecases
 
-import com.pppp.currencies.data.pokos.Rate
+import com.pppp.currencies.data.pokos.Currency
 import io.reactivex.Observable
+import java.math.BigDecimal
 
 
 interface GetRatesUseCase {
@@ -9,8 +10,8 @@ interface GetRatesUseCase {
     fun unSubscribe()
 
     fun subscribe(
-        base: Observable<String>,
-        success: ((List<Rate>) -> Unit)? = null,
+        base: Observable<Pair<String, BigDecimal>>,
+        success: ((List<Currency>) -> Unit)? = null,
         failure: ((Throwable) -> Unit)? = null
     )
 }

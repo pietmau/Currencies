@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
 //                })
 
 //        val rxRatesViewModel =
-//            RxRatesViewModel(RxGetRatesUseCase(RxMapperImpl(RetrofitClient(cacheDirectory = cacheDir), UrlCreator())))
+//            RxCurrenciesViewModel(RxGetRatesUseCase(RxMapperImpl(RetrofitClient(cacheDirectory = cacheDir), UrlCreator())))
 //        rxRatesViewModel
 //            .subscribe(this.lifecycle, {
 //                Log.e("foo", it.toString())

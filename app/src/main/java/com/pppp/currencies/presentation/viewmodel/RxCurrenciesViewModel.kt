@@ -2,19 +2,20 @@ package com.pppp.currencies.presentation.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.pppp.currencies.data.pokos.Rate
+import com.pppp.currencies.data.pokos.Currency
 import com.pppp.currencies.domain.usecases.GetRatesUseCase
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
+import java.math.BigDecimal
 
 //TODO careful with memory leaks!!!
 // TODO implemnet retry!!!
-class RxRatesViewModel(private val useCase: GetRatesUseCase) : ViewModel(), RatesViewModel {
-    override val data: MutableLiveData<List<Rate>> = MutableLiveData()
-    private val subject: Subject<String> = BehaviorSubject.create()
+class RxCurrenciesViewModel(private val useCase: GetRatesUseCase) : ViewModel(), CurrenciesViewModel {
+    override val data: MutableLiveData<List<Currency>> = MutableLiveData()
+    private val subject: Subject<Pair<String, BigDecimal>> = BehaviorSubject.create()
 
-    override fun changeBase(base: String) {
-        subject.onNext(base)
+    override fun changeBase(baseSymbol: String, baseAmount: BigDecimal) {
+        subject.onNext(Pair(baseSymbol, baseAmount))
     }
 
     override fun subscribe() {
