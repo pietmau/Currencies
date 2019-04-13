@@ -2,8 +2,8 @@ package com.pppp.currencies.presentation.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.pppp.currencies.data.repository.AmountCalculator
 import com.pppp.currencies.data.pokos.Currency
+import com.pppp.currencies.data.repository.AmountCalculator
 import com.pppp.currencies.domain.usecases.GetCurrenciesUseCase
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
@@ -11,12 +11,12 @@ import java.math.BigDecimal
 
 class RxCurrenciesViewModel(
     private val currenciesUseCase: GetCurrenciesUseCase,
-    private val amountCalculator: AmountCalculator = AmountCalculator()
+    private val amountCalculator: AmountCalculator = AmountCalculator(),
+    private val subject: Subject<Pair<String, BigDecimal>> = BehaviorSubject.create(),
+    override val data: MutableLiveData<List<Currency>> = MutableLiveData()
 ) :
     CurrenciesViewModel,
     ViewModel() {
-    override val data: MutableLiveData<List<Currency>> = MutableLiveData()
-    private val subject: Subject<Pair<String, BigDecimal>> = BehaviorSubject.create()
 
     override fun changeBase(baseSymbol: String, baseAmount: BigDecimal) {
         subject.onNext(Pair(baseSymbol, baseAmount))
@@ -29,7 +29,7 @@ class RxCurrenciesViewModel(
 
     override fun subscribe() {
         currenciesUseCase.subscribe(base = subject, success = {
-            data.value = it
+            data.postValue(it)
         })
     }
 
