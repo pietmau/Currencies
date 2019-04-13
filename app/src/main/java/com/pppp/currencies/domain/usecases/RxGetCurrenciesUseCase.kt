@@ -35,7 +35,7 @@ class RxGetCurrenciesUseCase(
     ) {
         val currencies = baseCurrency.startWith(Pair(DEFAULT_CURRENCY, BigDecimal(1)))
         val seconds = Observable.interval(1, TimeUnit.SECONDS)
-        seconds
+        subscription = seconds
             .withLatestFrom(currencies, biFunction)
             .subscribeOn(Schedulers.io())
             .flatMap { (baseSymbol, baseAmount) ->
