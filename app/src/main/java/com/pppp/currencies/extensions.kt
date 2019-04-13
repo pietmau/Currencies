@@ -6,4 +6,3 @@ fun <E> List<E>.swap(position: Int): List<E> {
     list.add(0, item)
     return list.toList()
 }
-

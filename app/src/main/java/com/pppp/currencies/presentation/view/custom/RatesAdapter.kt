@@ -1,5 +1,6 @@
 package com.pppp.currencies.presentation.view.custom
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -18,7 +19,13 @@ class RatesAdapter() : RecyclerView.Adapter<RatesViewHolder>() {
     private var rates: List<Rate> = listOf()
     lateinit var onSymbolSelected: (String) -> Unit
 
+    init {
+        setHasStableIds(true)
+    }
+
     override fun getItemCount() = rates.size
+
+    override fun getItemId(position: Int) = rates[position].symbol.hashCode().toLong()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RatesViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -31,6 +38,7 @@ class RatesAdapter() : RecyclerView.Adapter<RatesViewHolder>() {
             onBindViewHolder(holder, pos)
             return
         }
+        payloads
     }
 
     override fun onBindViewHolder(holder: RatesViewHolder, position: Int) {
@@ -43,15 +51,19 @@ class RatesAdapter() : RecyclerView.Adapter<RatesViewHolder>() {
     }
 
     private fun setRates(newRates: List<Rate>) {
+        Log.e("bar", "received " + newRates.toString())
+        Log.e("bar", "old ones " + rates.toString())
         val result = DiffUtil.calculateDiff(RatesDiffUtilCallback(newRates, this.rates))
         this.rates = newRates
         result.dispatchUpdatesTo(this)
     }
 
     private fun onItemClicked(position: Int) {
+        Log.e("bar", "CLICKED --------------------------------------------------------")
         onSymbolSelected(rates[position].symbol)
         val rates = this.rates.swap(position)
         setRates(rates)
+        Log.e("bar", "CLICKED --------------------------------------------------------")
         recyclerView.scrollToPosition(0)
     }
 
