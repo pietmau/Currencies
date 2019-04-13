@@ -1,13 +1,13 @@
 package com.pppp.currencies.domain.usecases
 
-import com.pppp.currencies.data.repository.Repository
 import com.pppp.currencies.data.pokos.Currency
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
+import com.pppp.currencies.data.repository.Repository
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.functions.BiFunction
+import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 
@@ -26,16 +26,20 @@ class RxGetCurrenciesUseCase(
 
     private var subscription: Disposable? = null
 
+    private var ldsdsd: List<Currency>? = null
+
     override fun subscribe(
         baseCurrency: Observable<Pair<String, BigDecimal>>,
         success: ((List<Currency>) -> Unit)?,
         failure: ((Throwable) -> Unit)?
     ) {
-        subscription = baseCurrency
-            .startWith(Pair(DEFAULT_CURRENCY, BigDecimal(1)))
-            // Every time the baseCurrency changes, it restarts polling the rates
-            .switchMap { (baseSymbol, baseAmount) ->
-                getCurrencies(baseSymbol, baseAmount)
+        val currencies = baseCurrency.startWith(Pair(DEFAULT_CURRENCY, BigDecimal(1)))
+        val seconds = Observable.interval(1, TimeUnit.SECONDS)
+        seconds
+            .withLatestFrom(currencies, biFunction)
+            .subscribeOn(Schedulers.io())
+            .flatMap { (baseSymbol, baseAmount) ->
+                repository.getCurrencies(baseSymbol, baseAmount)
             }
             .observeOn(mainScheduler)
             .subscribe({
@@ -45,18 +49,11 @@ class RxGetCurrenciesUseCase(
             })
     }
 
-    private fun getCurrencies(baseSymbol: String, baseAmount: BigDecimal) =
-    // Implements back pressure management because it polls from the network very often
-        Flowable.interval(1, TimeUnit.SECONDS)
-            .flatMap({
-                repository.getCurrencies(baseSymbol, baseAmount)
-                    .toFlowable(BackpressureStrategy.LATEST)
-                // Flatmaps only one subscription at the time
-            }, 1)
-            .toObservable()
-
     override fun unSubscribe() {
         subscription?.dispose()
     }
+
+    private val biFunction =
+        BiFunction<Long?, Pair<String, BigDecimal>?, Pair<String, BigDecimal>> { _: Long, pair: Pair<String, BigDecimal> -> pair }
 }
 
