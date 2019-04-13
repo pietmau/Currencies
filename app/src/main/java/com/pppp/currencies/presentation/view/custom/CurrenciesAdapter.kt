@@ -2,24 +2,23 @@ package com.pppp.currencies.presentation.view.custom
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.pppp.currencies.R
 import com.pppp.currencies.data.pokos.Currency
 import com.pppp.currencies.presentation.imageloader.ImageLoader
 import com.pppp.currencies.presentation.imageloader.PicassoImageLoader
-import com.pppp.currencies.swap
 import java.math.BigDecimal
 
-// TODO stableIdes!!!
-class CurrenciesAdapter() : RecyclerView.Adapter<CurrenciesViewHolder>() {
-    private lateinit var recyclerView: RecyclerView
+class CurrenciesAdapter(
+    private val delegate: CurrenciesAdapterDelegate = CurrenciesAdapterDelegate(),
     private val imageLoader: ImageLoader = PicassoImageLoader()
-    private var currencies: List<Currency> = listOf()
+) :
+    RecyclerView.Adapter<CurrenciesViewHolder>() {
+    private lateinit var recyclerView: RecyclerView
     lateinit var onCurrencyClicked: (String, BigDecimal) -> Unit
     lateinit var onAmountChanged: (String, String) -> Unit
 
-    override fun getItemCount() = currencies.size
+    override fun getItemCount() = delegate.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrenciesViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -28,9 +27,7 @@ class CurrenciesAdapter() : RecyclerView.Adapter<CurrenciesViewHolder>() {
     }
 
     override fun onBindViewHolder(
-        holder: CurrenciesViewHolder,
-        position: Int,
-        payloads: MutableList<Any>
+        holder: CurrenciesViewHolder, position: Int, payloads: MutableList<Any>
     ) {
         if (payloads.isEmpty()) {
             onBindViewHolder(holder, position)
@@ -40,46 +37,31 @@ class CurrenciesAdapter() : RecyclerView.Adapter<CurrenciesViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: CurrenciesViewHolder, position: Int) {
-        holder.bind(currencies[position], ::onItemClicked, ::onAmountChanged)
+        holder.bind(delegate[position], ::onItemClicked, ::onAmountChanged)
     }
 
-    private fun onAmountChanged(position: Int, amount: String) {
-        if (position == 0) {
-            onAmountChanged(currencies[position].symbol, amount)
-        }
-    }
-
-    fun updateRates(currencies: List<Currency>) {
-        val newRates = sortRates(currencies)
-        setRates(newRates)
-    }
-
-    private fun setRates(newCurrencies: List<Currency>) {
-        val result = DiffUtil.calculateDiff(CurrencyDiffCallback(newCurrencies, currencies))
-        currencies = newCurrencies
+    fun updateCurrencies(currencies: List<Currency>) {
+        val result = delegate.updateCurrencies(currencies)
         result.dispatchUpdatesTo(this)
-    }
-
-    private fun onItemClicked(position: Int) {
-        val newBase = currencies[position]
-        onCurrencyClicked(newBase.symbol, newBase.amount)
-        val swapped = currencies.swap(position)
-        setRates(swapped)
-        recyclerView.scrollToPosition(0)
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         this.recyclerView = recyclerView
     }
 
-    // TODO comment
-    private fun sortRates(currencies: List<Currency>): List<Currency> {
-        if (this.currencies.isEmpty()) {
-            return currencies
+    private fun onItemClicked(position: Int) {
+        val newBase = delegate[position]
+        onCurrencyClicked(newBase.symbol, newBase.amount)
+        val result = delegate.swap(position)
+        result.dispatchUpdatesTo(this)
+        recyclerView.scrollToPosition(0)
+    }
+
+    private fun isBaseCurrency(position: Int) = position == 0
+
+    private fun onAmountChanged(position: Int, amount: String) {
+        if (isBaseCurrency(position)) {
+            onAmountChanged(delegate[position].symbol, amount)
         }
-        val mapped = currencies.associateBy { it.symbol }
-        return this.currencies
-            .map { rate -> mapped[rate.symbol] }
-            .filterNotNull()
     }
 }

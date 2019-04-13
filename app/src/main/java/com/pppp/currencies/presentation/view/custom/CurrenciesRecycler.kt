@@ -34,7 +34,7 @@ class CurrenciesRecycler @JvmOverloads constructor(
     }
 
     fun updateRates(currencies: List<Currency>) {
-        currenciesAdapter.updateRates(currencies)
+        currenciesAdapter.updateCurrencies(currencies)
     }
 
 }
