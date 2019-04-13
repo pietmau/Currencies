@@ -8,6 +8,5 @@ data class Currency(
     val rate: String,//TODO use big decimal instead
     val amount: BigDecimal = BigDecimal(1),
     val country: String?,
-    val url: String,
-    val isBase: Boolean = false //TODO remove
+    val url: String
 )

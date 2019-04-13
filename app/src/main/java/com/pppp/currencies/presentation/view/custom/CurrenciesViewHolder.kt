@@ -6,13 +6,17 @@ import com.pppp.currencies.data.pokos.Currency
 import com.pppp.currencies.presentation.imageloader.ImageLoader
 import kotlinx.android.synthetic.main.holder_rates.view.*
 
-class CurrenciesViewHolder(val view: View, private val imageLoader: ImageLoader) :
+class CurrenciesViewHolder(
+    val view: View,
+    private val imageLoader: ImageLoader,
+    private val currencyFormatter: CurrencyFormatter = CurrencyFormatterImpl()
+) :
     RecyclerView.ViewHolder(view) {
 
     fun bind(currency: Currency, clickListener: (Int) -> Unit) {
         itemView.symbol.text = currency.symbol
         itemView.country.text = currency.country
-        itemView.amount.setText(currency.amount.toPlainString())//TODO use NumberFormat
+        itemView.amount.setText(currencyFormatter.format(currency.amount))
         imageLoader.loadImage(currency.url, itemView.flag)
         itemView.setOnClickListener {
             clickListener(adapterPosition)
@@ -20,7 +24,7 @@ class CurrenciesViewHolder(val view: View, private val imageLoader: ImageLoader)
     }
 
     fun onNewAmount(payload: Any) {
-        val currency = (payload as Currency).amount.toPlainString()
+        val currency = currencyFormatter.format((payload as Currency).amount)
         itemView.amount.setText(currency)//TODO use NumberFormat
     }
 

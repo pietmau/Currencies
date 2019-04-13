@@ -42,7 +42,7 @@ class CurrencyCreatorImpl(
         val symbol = symbol
         val url = urlCreator.createUrl(symbol)
         val countryName = names[symbol]
-        return Currency(symbol, 1.toString(), amount, countryName, url, true)
+        return Currency(symbol, 1.toString(), amount, countryName, url)
     }
 
     private fun createOtherCurrency(

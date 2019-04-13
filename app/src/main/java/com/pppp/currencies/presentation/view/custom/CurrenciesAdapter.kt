@@ -1,6 +1,5 @@
 package com.pppp.currencies.presentation.view.custom
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -50,14 +49,11 @@ class CurrenciesAdapter() : RecyclerView.Adapter<CurrenciesViewHolder>() {
     }
 
     fun updateRates(currencies: List<Currency>) {
-        Log.e("bar", "api " + currencies.toString())
         val newRates = sortRates(currencies)
         setRates(newRates)
     }
 
     private fun setRates(newCurrencies: List<Currency>) {
-        Log.e("bar", "received " + newCurrencies.toString())
-        Log.e("bar", "old ones " + currencies.toString())
         val result =
             DiffUtil.calculateDiff(CurrenciesDiffUtilCallback(newCurrencies, this.currencies))
         this.currencies = newCurrencies
@@ -65,12 +61,10 @@ class CurrenciesAdapter() : RecyclerView.Adapter<CurrenciesViewHolder>() {
     }
 
     private fun onItemClicked(position: Int) {
-        Log.e("bar", "CLICKED --------------------------------------------------------")
         val newBase = currencies[position]
         onCurrencyClicked(newBase.symbol, newBase.amount)
         val swapped = this.currencies.swap(position)
         setRates(swapped)
-        Log.e("bar", "CLICKED --------------------------------------------------------")
         recyclerView.scrollToPosition(0)
     }
 
