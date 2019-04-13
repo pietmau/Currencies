@@ -42,7 +42,7 @@
             app:layout_constraintTop_toBottomOf="@+id/symbol"
             />
 
-        <com.pppp.currencies.presentation.view.custom.CurrencyEditText
+        <EditText
             android:id="@+id/amount_input"
             android:inputType="numberDecimal|number"
             android:layout_width="80dp"

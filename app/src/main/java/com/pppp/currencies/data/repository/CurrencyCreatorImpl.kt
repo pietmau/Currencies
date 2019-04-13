@@ -1,4 +1,4 @@
-package com.pppp.currencies.data.mapper
+package com.pppp.currencies.data.repository
 
 import com.pppp.currencies.data.pokos.Currency
 import com.pppp.currencies.data.rates.CurrenciesResponse

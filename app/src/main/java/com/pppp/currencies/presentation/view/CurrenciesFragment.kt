@@ -29,7 +29,7 @@ class CurrenciesFragment : Fragment() {
             viewModel.changeBase(baseSymbol, baseAmount)
         }
         recycler.onAmountChanged = { baseSymbol, baseAmount ->
-            viewModel.onBaseAmountChanged(baseSymbol, baseAmount)
+            viewModel.changeBaseAmount(baseSymbol, baseAmount)
         }
         viewModel.data.observe(requireActivity(), Observer(recycler::updateRates))
     }

@@ -1,6 +1,6 @@
 package com.pppp.currencies.domain.usecases
 
-import com.pppp.currencies.data.mapper.Repository
+import com.pppp.currencies.data.repository.Repository
 import com.pppp.currencies.data.pokos.Currency
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable

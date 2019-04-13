@@ -2,15 +2,13 @@ package com.pppp.currencies.presentation.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.pppp.currencies.data.mapper.AmountCalculator
+import com.pppp.currencies.data.repository.AmountCalculator
 import com.pppp.currencies.data.pokos.Currency
 import com.pppp.currencies.domain.usecases.GetCurrenciesUseCase
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import java.math.BigDecimal
 
-//TODO careful with memory leaks!!!
-// TODO implemnet retry!!!
 class RxCurrenciesViewModel(
     private val currenciesUseCase: GetCurrenciesUseCase,
     private val amountCalculator: AmountCalculator = AmountCalculator()
@@ -24,7 +22,7 @@ class RxCurrenciesViewModel(
         subject.onNext(Pair(baseSymbol, baseAmount))
     }
 
-    override fun onBaseAmountChanged(baseSymbol: String, baseAmount: String) {
+    override fun changeBaseAmount(baseSymbol: String, baseAmount: String) {
         amountCalculator.parseAmount(baseAmount)
             ?.let { changeBase(baseSymbol, it) }
     }

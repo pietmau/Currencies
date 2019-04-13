@@ -4,7 +4,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import com.pppp.currencies.data.mapper.*
+import com.pppp.currencies.data.repository.*
 import com.pppp.currencies.data.network.client.Client
 import com.pppp.currencies.data.network.client.RetrofitClient
 import com.pppp.currencies.domain.usecases.GetCurrenciesUseCase

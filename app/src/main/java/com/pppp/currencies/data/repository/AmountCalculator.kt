@@ -1,4 +1,4 @@
-package com.pppp.currencies.data.mapper
+package com.pppp.currencies.data.repository
 
 import java.math.BigDecimal
 

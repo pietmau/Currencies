@@ -14,5 +14,5 @@ interface CurrenciesViewModel {
 
     fun unsubscribe()
 
-    fun onBaseAmountChanged(baseSymbol: String, baseAmount: String)
+    fun changeBaseAmount(baseSymbol: String, baseAmount: String)
 }

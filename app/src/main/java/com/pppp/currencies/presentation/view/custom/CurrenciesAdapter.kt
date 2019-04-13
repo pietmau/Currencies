@@ -33,6 +33,9 @@ class CurrenciesAdapter(
             onBindViewHolder(holder, position)
             return
         }
+        if (position == 0) {
+            return
+        }
         holder.bindNewAmount(payloads[0])
     }
 
