@@ -19,13 +19,7 @@ class CurrenciesAdapter() : RecyclerView.Adapter<CurrenciesViewHolder>() {
     lateinit var onCurrencyClicked: (String, BigDecimal) -> Unit
     lateinit var onAmountChanged: (String, String) -> Unit
 
-    init {
-        setHasStableIds(true)//TODO does it actually do anything?
-    }
-
     override fun getItemCount() = currencies.size
-
-    override fun getItemId(position: Int) = currencies[position].symbol.hashCode().toLong()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrenciesViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -46,11 +40,13 @@ class CurrenciesAdapter() : RecyclerView.Adapter<CurrenciesViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: CurrenciesViewHolder, position: Int) {
-        holder.bind(currencies[position], ::onItemClicked, ::onAmountChanged, position == 0)
+        holder.bind(currencies[position], ::onItemClicked, ::onAmountChanged)
     }
 
     private fun onAmountChanged(position: Int, amount: String) {
-        onAmountChanged(currencies[position].symbol, amount)//TODO position not really neeeded
+        if (position == 0) {
+            onAmountChanged(currencies[position].symbol, amount)
+        }
     }
 
     fun updateRates(currencies: List<Currency>) {

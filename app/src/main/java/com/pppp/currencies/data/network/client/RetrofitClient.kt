@@ -1,7 +1,7 @@
 package com.pppp.currencies.data.network.client
 
 import com.pppp.currencies.data.network.api.NamesApi
-import com.pppp.currencies.data.network.api.RatesApi
+import com.pppp.currencies.data.network.api.CurrenciesApi
 import com.pppp.currencies.data.rates.RatesResponse
 import io.reactivex.Observable
 import okhttp3.Cache
@@ -31,7 +31,7 @@ class RetrofitClient(
         .baseUrl(ratesBaseUrl)
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .addConverterFactory(GsonConverterFactory.create())
-        .build().create(RatesApi::class.java)
+        .build().create(CurrenciesApi::class.java)
 
     private val namesApi = Retrofit.Builder()
         .baseUrl(namesBaseUrl)
@@ -45,7 +45,7 @@ class RetrofitClient(
     override suspend fun getNamesXXX() = namesApi.getNames()
 
     override fun getRates(base: String): Observable<RatesResponse> =
-        ratesApi.getRatesObservable(base).toObservable()
+        ratesApi.getCurrenciesObservable(base).toObservable()
 
     override fun getNames() = namesApi.getNamesObservable().toObservable()
 }

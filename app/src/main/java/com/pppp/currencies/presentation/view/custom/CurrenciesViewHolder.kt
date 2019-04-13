@@ -16,8 +16,7 @@ class CurrenciesViewHolder(
     fun bind(
         currency: Currency,
         clickListener: (Int) -> Unit,
-        amountListener: (Int, String) -> Unit,
-        isBase: Boolean
+        amountListener: ((Int, String) -> Unit)?
     ) {
         itemView.symbol.text = currency.symbol
         itemView.country.text = currency.country
@@ -27,13 +26,8 @@ class CurrenciesViewHolder(
             clickListener(adapterPosition)
         }
         itemView.amount_input.addTextChangedListener(SimpleTextWatcher({
-            amountListener(adapterPosition, it)
+            amountListener?.invoke(adapterPosition, it)
         }))
-        enableInputField(isBase)
-    }
-
-    private fun enableInputField(enable: Boolean) {
-        itemView.amount_input.isEnabled = enable
     }
 
     fun bindNewAmount(payload: Any) {
