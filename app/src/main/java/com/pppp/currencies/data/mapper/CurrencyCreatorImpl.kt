@@ -5,9 +5,12 @@ import com.pppp.currencies.data.rates.RatesResponse
 import java.math.BigDecimal
 
 
-class CurrencyCreatorImpl(private val urlCreator: UrlCreator = UrlCreator()) : CurrencyCreator {
+class CurrencyCreatorImpl(
+    private val urlCreator: UrlCreator = UrlCreator(),
+    private val amountCalculator: AmountCalculator
+) : CurrencyCreator {
 
-    override fun createRates(
+    override fun createCurrency(
         response: RatesResponse,
         names: Map<String, String>,
         baseAmount: BigDecimal
@@ -22,7 +25,14 @@ class CurrencyCreatorImpl(private val urlCreator: UrlCreator = UrlCreator()) : C
         names: Map<String, String>,
         baseAmount: BigDecimal
     ) =
-        response.rates.map { entry -> createOtherCurrency(entry, names, baseAmount) }
+        response.rates.map { entry ->
+            createOtherCurrency(
+                entry.key,
+                entry.value,
+                names,
+                baseAmount
+            )
+        }
 
     private fun createBaseCurrency(
         symbol: String,
@@ -36,15 +46,19 @@ class CurrencyCreatorImpl(private val urlCreator: UrlCreator = UrlCreator()) : C
     }
 
     private fun createOtherCurrency(
-        entry: Map.Entry<String, Double>,
+        symbol: String,
+        rate: String,
         names: Map<String, String>,
         baseAmount: BigDecimal
     ): Currency {
-        val symbol = entry.key
         val url = urlCreator.createUrl(symbol)
         val countryName = names[symbol]
-        return Currency(symbol, entry.value.toString(), calculateAmount(), countryName, url)
+        return Currency(
+            symbol,
+            rate,
+            amountCalculator.calculateAmount(rate, baseAmount),
+            countryName,
+            url
+        )
     }
-
-    private fun calculateAmount() = BigDecimal(1)
 }

@@ -13,8 +13,7 @@ import com.pppp.currencies.swap
 import java.math.BigDecimal
 
 // TODO stableIdes!!!
-class RatesAdapter() : RecyclerView.Adapter<RatesViewHolder>() {
-
+class CurrenciesAdapter() : RecyclerView.Adapter<CurrenciesViewHolder>() {
     private lateinit var recyclerView: RecyclerView
     private val imageLoader: ImageLoader = PicassoImageLoader()
     private var currencies: List<Currency> = listOf()
@@ -28,25 +27,30 @@ class RatesAdapter() : RecyclerView.Adapter<RatesViewHolder>() {
 
     override fun getItemId(position: Int) = currencies[position].symbol.hashCode().toLong()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RatesViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrenciesViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(R.layout.holder_rates, parent, false)
-        return RatesViewHolder(view, imageLoader)
+        return CurrenciesViewHolder(view, imageLoader)
     }
 
-    override fun onBindViewHolder(holder: RatesViewHolder, pos: Int, payloads: MutableList<Any>) {
+    override fun onBindViewHolder(
+        holder: CurrenciesViewHolder,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
         if (payloads.isEmpty()) {
-            onBindViewHolder(holder, pos)
+            onBindViewHolder(holder, position)
             return
         }
-        payloads
+        holder.onNewAmount(payloads[0])
     }
 
-    override fun onBindViewHolder(holder: RatesViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CurrenciesViewHolder, position: Int) {
         holder.bind(currencies[position], ::onItemClicked)
     }
 
     fun updateRates(currencies: List<Currency>) {
+        Log.e("bar", "api " + currencies.toString())
         val newRates = sortRates(currencies)
         setRates(newRates)
     }
@@ -54,7 +58,8 @@ class RatesAdapter() : RecyclerView.Adapter<RatesViewHolder>() {
     private fun setRates(newCurrencies: List<Currency>) {
         Log.e("bar", "received " + newCurrencies.toString())
         Log.e("bar", "old ones " + currencies.toString())
-        val result = DiffUtil.calculateDiff(RatesDiffUtilCallback(newCurrencies, this.currencies))
+        val result =
+            DiffUtil.calculateDiff(CurrenciesDiffUtilCallback(newCurrencies, this.currencies))
         this.currencies = newCurrencies
         result.dispatchUpdatesTo(this)
     }

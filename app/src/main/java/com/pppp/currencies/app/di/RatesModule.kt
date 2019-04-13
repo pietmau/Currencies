@@ -4,10 +4,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import com.pppp.currencies.data.mapper.CurrencyCreatorImpl
-import com.pppp.currencies.data.mapper.RxMapper
-import com.pppp.currencies.data.mapper.RxMapperImpl
-import com.pppp.currencies.data.mapper.UrlCreator
+import com.pppp.currencies.data.mapper.*
 import com.pppp.currencies.data.network.client.Client
 import com.pppp.currencies.data.network.client.RetrofitClient
 import com.pppp.currencies.domain.usecases.GetRatesUseCase
@@ -29,7 +26,7 @@ class RatesModule(private val activity: FragmentActivity) {
 
     @Provides
     internal fun provideMapper(client: Client): RxMapper =
-        RxMapperImpl(client, CurrencyCreatorImpl(UrlCreator()))
+        RxMapperImpl(client, CurrencyCreatorImpl(UrlCreator(), AmountCalculator()))
 
     @Provides
     internal fun provideClient(): Client = RetrofitClient(cacheDirectory = activity.cacheDir)

@@ -9,5 +9,5 @@ import java.math.BigDecimal
  */
 interface RxMapper {
 
-    fun getRates(baseSymbol: String, basAmount: BigDecimal): Observable<List<Currency>>
+    fun getCurrencies(baseSymbol: String, basAmount: BigDecimal): Observable<List<Currency>>
 }

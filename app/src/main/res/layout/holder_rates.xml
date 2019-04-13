@@ -43,6 +43,7 @@
             />
 
         <com.pppp.currencies.presentation.view.custom.CurrencyEditText
+            android:id="@+id/amount"
             android:inputType="numberDecimal|number"
             android:layout_width="80dp"
             android:layout_height="wrap_content"

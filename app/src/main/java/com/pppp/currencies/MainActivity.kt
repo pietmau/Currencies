@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         val client = RetrofitClient(cacheDirectory = cacheDir)
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                //val result = client.getRates("EUR")
+                //val result = client.getCurrencies("EUR")
                 foo()
             } catch (exception: Exception) {
                 foo()

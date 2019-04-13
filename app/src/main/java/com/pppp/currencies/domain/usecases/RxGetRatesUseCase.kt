@@ -26,7 +26,6 @@ class RxGetRatesUseCase(
     private var subscription: Disposable? = null
 
     override fun subscribe(
-        // Gets the currency from the user (if they change)
         baseCurrency: Observable<Pair<String, BigDecimal>>,
         success: ((List<Currency>) -> Unit)?,
         failure: ((Throwable) -> Unit)?
@@ -35,7 +34,7 @@ class RxGetRatesUseCase(
             .startWith(Pair(DEFAULT_CURRENCY, BigDecimal(1)))
             // Every time the baseCurrency changes, it restarts polling the rates
             .switchMap { (baseSymbol, baseAmount) ->
-                getRates(baseSymbol, baseAmount)
+                getCurrencies(baseSymbol, baseAmount)
             }
             .observeOn(mainScheduler)
             .subscribe({
@@ -45,11 +44,11 @@ class RxGetRatesUseCase(
             })
     }
 
-    private fun getRates(baseSymbol: String, baseAmount: BigDecimal) =
+    private fun getCurrencies(baseSymbol: String, baseAmount: BigDecimal) =
     // Implements back pressure management because it polls from the network very often
         Flowable.interval(1, TimeUnit.SECONDS)
             .flatMap({
-                mapper.getRates(baseSymbol, baseAmount).toFlowable(BackpressureStrategy.LATEST)
+                mapper.getCurrencies(baseSymbol, baseAmount).toFlowable(BackpressureStrategy.LATEST)
                 // Flatmaps only one subscription at the time
             }, 1)
             .toObservable()

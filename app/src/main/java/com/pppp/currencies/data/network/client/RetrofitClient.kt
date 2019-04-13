@@ -29,7 +29,6 @@ class RetrofitClient(
 
     private val ratesApi = Retrofit.Builder()
         .baseUrl(ratesBaseUrl)
-        .client(client)
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .addConverterFactory(GsonConverterFactory.create())
         .build().create(RatesApi::class.java)
@@ -41,8 +40,7 @@ class RetrofitClient(
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .build().create(NamesApi::class.java)
 
-    override suspend fun getRatesXXX(base: String): Map<String, Double> =
-        ratesApi.getRates(base).rates ?: emptyMap()
+    override suspend fun getRatesXXX(base: String): Map<String, Double> = TODO()
 
     override suspend fun getNamesXXX() = namesApi.getNames()
 

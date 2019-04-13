@@ -12,5 +12,5 @@ data class RatesResponse(
     var date: String = "",
     @SerializedName("rates")
     @Expose
-    var rates: Map<String, Double> = emptyMap()
+    var rates: Map<String, String> = emptyMap()
 )

@@ -6,7 +6,7 @@ import java.math.BigDecimal
 
 interface CurrencyCreator {
 
-    fun createRates(
+    fun createCurrency(
         response: RatesResponse,
         names: Map<String, String>,
         second: BigDecimal
