@@ -2,7 +2,7 @@ package com.pppp.currencies.data.network.client
 
 import com.pppp.currencies.data.network.api.NamesApi
 import com.pppp.currencies.data.network.api.CurrenciesApi
-import com.pppp.currencies.data.rates.RatesResponse
+import com.pppp.currencies.data.rates.CurrenciesResponse
 import io.reactivex.Observable
 import okhttp3.Cache
 import okhttp3.OkHttpClient
@@ -44,7 +44,7 @@ class RetrofitClient(
 
     override suspend fun getNamesXXX() = namesApi.getNames()
 
-    override fun getRates(base: String): Observable<RatesResponse> =
+    override fun getRates(base: String): Observable<CurrenciesResponse> =
         ratesApi.getCurrenciesObservable(base).toObservable()
 
     override fun getNames() = namesApi.getNamesObservable().toObservable()

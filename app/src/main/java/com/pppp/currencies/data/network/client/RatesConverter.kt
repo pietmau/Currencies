@@ -1,7 +1,7 @@
 package com.pppp.currencies.data.network.client
 
 import com.google.gson.reflect.TypeToken
-import com.pppp.currencies.data.rates.RatesResponse
+import com.pppp.currencies.data.rates.CurrenciesResponse
 import okhttp3.ResponseBody
 import retrofit2.Converter
 import retrofit2.Retrofit
@@ -15,8 +15,8 @@ class RatesConverter : Converter.Factory() {
         annotations: Array<Annotation>,
         retrofit: Retrofit
     ): Converter<ResponseBody, Map<String, Double>?>? {
-        val type = TypeToken.getParameterized(RatesResponse::class.java, type).type
-        val delegate: Converter<ResponseBody, RatesResponse> =
+        val type = TypeToken.getParameterized(CurrenciesResponse::class.java, type).type
+        val delegate: Converter<ResponseBody, CurrenciesResponse> =
             retrofit.nextResponseBodyConverter(this, type, annotations)
         TODO()
         //return Converter { value -> delegate.convert(value)?.rates }

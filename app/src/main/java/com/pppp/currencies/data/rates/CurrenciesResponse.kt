@@ -3,7 +3,7 @@ package com.pppp.currencies.data.rates
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class RatesResponse(
+data class CurrenciesResponse(
     @SerializedName("base")
     @Expose
     var base: String = "",

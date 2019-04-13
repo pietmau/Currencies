@@ -1,6 +1,6 @@
 package com.pppp.currencies.domain.usecases
 
-import com.pppp.currencies.data.mapper.RxMapper
+import com.pppp.currencies.data.mapper.Repository
 import com.pppp.currencies.data.pokos.Currency
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -18,11 +18,12 @@ const val DEFAULT_CURRENCY = "EUR"
 /**
  * Emission does not happen on the main thread, because we start//TODO
  */
-class RxGetRatesUseCase(
-    private val mapper: RxMapper,
+class RxGetCurrenciesUseCase(
+    private val repository: Repository,
     private val mainScheduler: Scheduler = AndroidSchedulers.mainThread()
 ) :
-    GetRatesUseCase {
+    GetCurrenciesUseCase {
+
     private var subscription: Disposable? = null
 
     override fun subscribe(
@@ -48,7 +49,8 @@ class RxGetRatesUseCase(
     // Implements back pressure management because it polls from the network very often
         Flowable.interval(1, TimeUnit.SECONDS)
             .flatMap({
-                mapper.getCurrencies(baseSymbol, baseAmount).toFlowable(BackpressureStrategy.LATEST)
+                repository.getCurrencies(baseSymbol, baseAmount)
+                    .toFlowable(BackpressureStrategy.LATEST)
                 // Flatmaps only one subscription at the time
             }, 1)
             .toObservable()
@@ -56,6 +58,5 @@ class RxGetRatesUseCase(
     override fun unSubscribe() {
         subscription?.dispose()
     }
-
 }
 

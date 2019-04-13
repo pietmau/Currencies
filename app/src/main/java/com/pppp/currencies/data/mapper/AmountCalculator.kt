@@ -9,5 +9,12 @@ class AmountCalculator {
      */
     fun calculateAmount(rate: String, baseAmount: BigDecimal) =
         baseAmount.times(rate.toBigDecimal())
+
+    fun parseAmount(amount: String) = try {
+        BigDecimal(amount)
+    } catch (e: Exception) {
+        null
+    }
+
 }
 

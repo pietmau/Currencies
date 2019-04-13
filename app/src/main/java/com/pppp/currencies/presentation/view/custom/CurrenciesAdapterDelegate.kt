@@ -35,5 +35,7 @@ class CurrenciesAdapterDelegate {
         val result = calculateDiffsAndSet(swapped)
         return result
     }
+
+    fun isBaseCurrencyPosition(position: Int) = position == 0
 }
 

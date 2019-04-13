@@ -7,7 +7,7 @@ import java.math.BigDecimal
 /**
  * Gets the response from the api and maps it.
  */
-interface RxMapper {
+interface Repository {
 
     fun getCurrencies(baseSymbol: String, basAmount: BigDecimal): Observable<List<Currency>>
 }

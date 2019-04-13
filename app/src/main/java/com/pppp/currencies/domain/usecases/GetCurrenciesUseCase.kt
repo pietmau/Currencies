@@ -5,7 +5,7 @@ import io.reactivex.Observable
 import java.math.BigDecimal
 
 
-interface GetRatesUseCase {
+interface GetCurrenciesUseCase {
 
     fun unSubscribe()
 

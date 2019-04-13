@@ -57,10 +57,8 @@ class CurrenciesAdapter(
         recyclerView.scrollToPosition(0)
     }
 
-    private fun isBaseCurrency(position: Int) = position == 0
-
     private fun onAmountChanged(position: Int, amount: String) {
-        if (isBaseCurrency(position)) {
+        if (delegate.isBaseCurrencyPosition(position)) {
             onAmountChanged(delegate[position].symbol, amount)
         }
     }

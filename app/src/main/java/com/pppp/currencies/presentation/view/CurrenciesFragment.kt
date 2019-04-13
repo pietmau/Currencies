@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.pppp.currencies.R
-import com.pppp.currencies.app.di.DaggerRatesComponent
-import com.pppp.currencies.app.di.RatesModule
+import com.pppp.currencies.app.di.CurrenciesModule
+import com.pppp.currencies.app.di.DaggerCurrenciesComponent
 import com.pppp.currencies.presentation.viewmodel.CurrenciesViewModel
 import kotlinx.android.synthetic.main.rates_fragment.*
 import javax.inject.Inject
@@ -19,8 +19,8 @@ class CurrenciesFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val ratesModule = RatesModule(requireActivity())
-        DaggerRatesComponent.builder().ratesModule(ratesModule).build().inject(this)
+        val ratesModule = CurrenciesModule(requireActivity())
+        DaggerCurrenciesComponent.builder().currenciesModule(ratesModule).build().inject(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -28,8 +28,8 @@ class CurrenciesFragment : Fragment() {
         recycler.onCurrencyClicked = { baseSymbol, baseAmount ->
             viewModel.changeBase(baseSymbol, baseAmount)
         }
-        recycler.onAmountChanged = { symbol, amount ->
-
+        recycler.onAmountChanged = { baseSymbol, baseAmount ->
+            viewModel.onBaseAmountChanged(baseSymbol, baseAmount)
         }
         viewModel.data.observe(requireActivity(), Observer(recycler::updateRates))
     }

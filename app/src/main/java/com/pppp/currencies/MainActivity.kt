@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         //.subscribe { Log.e("foo", "reciveed " + it) }
 
 //        val z =
-//            RxGetRatesUseCase(RxMapperImpl(RetrofitClient(cacheDir = this.cacheDir))).subscribe(
+//            RxGetCurrenciesUseCase(RepositoryImpl(RetrofitClient(cacheDir = this.cacheDir))).subscribe(
 //                Observable.interval(3, TimeUnit.SECONDS).zipWith(Observable.just("EUR", "GBP"),
 //                    BiFunction { time: Long, symbol: String -> symbol }),
 //                {
@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
 //                })
 
 //        val rxRatesViewModel =
-//            RxCurrenciesViewModel(RxGetRatesUseCase(RxMapperImpl(RetrofitClient(cacheDirectory = cacheDir), UrlCreator())))
+//            RxCurrenciesViewModel(RxGetCurrenciesUseCase(RepositoryImpl(RetrofitClient(cacheDirectory = cacheDir), UrlCreator())))
 //        rxRatesViewModel
 //            .subscribe(this.lifecycle, {
 //                Log.e("foo", it.toString())

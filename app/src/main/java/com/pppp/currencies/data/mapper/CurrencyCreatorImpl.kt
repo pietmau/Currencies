@@ -1,7 +1,7 @@
 package com.pppp.currencies.data.mapper
 
 import com.pppp.currencies.data.pokos.Currency
-import com.pppp.currencies.data.rates.RatesResponse
+import com.pppp.currencies.data.rates.CurrenciesResponse
 import java.math.BigDecimal
 
 
@@ -11,7 +11,7 @@ class CurrencyCreatorImpl(
 ) : CurrencyCreator {
 
     override fun createCurrency(
-        response: RatesResponse,
+        response: CurrenciesResponse,
         names: Map<String, String>,
         baseAmount: BigDecimal
     ): List<Currency> {
@@ -21,7 +21,7 @@ class CurrencyCreatorImpl(
     }
 
     private fun createOtherCurrencies(
-        response: RatesResponse,
+        response: CurrenciesResponse,
         names: Map<String, String>,
         baseAmount: BigDecimal
     ) =

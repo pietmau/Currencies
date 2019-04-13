@@ -7,36 +7,36 @@ import androidx.lifecycle.ViewModelProviders
 import com.pppp.currencies.data.mapper.*
 import com.pppp.currencies.data.network.client.Client
 import com.pppp.currencies.data.network.client.RetrofitClient
-import com.pppp.currencies.domain.usecases.GetRatesUseCase
-import com.pppp.currencies.domain.usecases.RxGetRatesUseCase
+import com.pppp.currencies.domain.usecases.GetCurrenciesUseCase
+import com.pppp.currencies.domain.usecases.RxGetCurrenciesUseCase
 import com.pppp.currencies.presentation.viewmodel.CurrenciesViewModel
 import com.pppp.currencies.presentation.viewmodel.RxCurrenciesViewModel
 import dagger.Module
 import dagger.Provides
 
 @Module
-class RatesModule(private val activity: FragmentActivity) {
+class CurrenciesModule(private val activity: FragmentActivity) {
 
     @Provides
     fun providesViewModel(factory: ViewModelProvider.Factory): CurrenciesViewModel =
         ViewModelProviders.of(activity, factory).get(RxCurrenciesViewModel::class.java)
 
     @Provides
-    internal fun providesUseCase(mapper: RxMapper): GetRatesUseCase = RxGetRatesUseCase(mapper)
+    internal fun providesUseCase(mapper: Repository): GetCurrenciesUseCase = RxGetCurrenciesUseCase(mapper)
 
     @Provides
-    internal fun provideMapper(client: Client): RxMapper =
-        RxMapperImpl(client, CurrencyCreatorImpl(UrlCreator(), AmountCalculator()))
+    internal fun provideMapper(client: Client): Repository =
+        RepositoryImpl(client, CurrencyCreatorImpl(UrlCreator(), AmountCalculator()))
 
     @Provides
     internal fun provideClient(): Client = RetrofitClient(cacheDirectory = activity.cacheDir)
 
     @Provides
-    internal fun providefactory(uscase: GetRatesUseCase): ViewModelProvider.Factory =
+    internal fun providefactory(uscase: GetCurrenciesUseCase): ViewModelProvider.Factory =
         RatesViewModelFactory(uscase)
 }
 
-class RatesViewModelFactory(private val useCase: GetRatesUseCase) : ViewModelProvider.Factory {
+class RatesViewModelFactory(private val useCase: GetCurrenciesUseCase) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T = RxCurrenciesViewModel(useCase) as T
 }

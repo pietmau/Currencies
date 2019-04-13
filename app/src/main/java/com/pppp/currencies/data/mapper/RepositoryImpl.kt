@@ -5,8 +5,8 @@ import com.pppp.currencies.data.pokos.Currency
 import io.reactivex.Observable
 import java.math.BigDecimal
 
-class RxMapperImpl(private val client: Client, private val currencyCreator: CurrencyCreator) :
-    RxMapper {
+class RepositoryImpl(private val client: Client, private val currencyCreator: CurrencyCreator) :
+    Repository {
 
     override fun getCurrencies(
         baseSymbol: String,
