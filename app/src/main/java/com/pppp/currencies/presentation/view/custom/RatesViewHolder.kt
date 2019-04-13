@@ -17,4 +17,5 @@ class RatesViewHolder(val view: View, private val imageLoader: ImageLoader) :
             clickListener(adapterPosition)
         }
     }
+
 }

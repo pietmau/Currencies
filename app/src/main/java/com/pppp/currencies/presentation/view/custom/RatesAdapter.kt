@@ -8,12 +8,14 @@ import com.pppp.currencies.R
 import com.pppp.currencies.data.pokos.Rate
 import com.pppp.currencies.presentation.imageloader.ImageLoader
 import com.pppp.currencies.presentation.imageloader.PicassoImageLoader
+import com.pppp.currencies.swap
 
-
+// TODO stableIdes!!!
 class RatesAdapter() : RecyclerView.Adapter<RatesViewHolder>() {
+
     private lateinit var recyclerView: RecyclerView
     private val imageLoader: ImageLoader = PicassoImageLoader()
-    private val rates: MutableList<Rate> = mutableListOf()
+    private var rates: List<Rate> = listOf()
     lateinit var onSymbolSelected: (String) -> Unit
 
     override fun getItemCount() = rates.size
@@ -24,26 +26,46 @@ class RatesAdapter() : RecyclerView.Adapter<RatesViewHolder>() {
         return RatesViewHolder(view, imageLoader)
     }
 
+    override fun onBindViewHolder(holder: RatesViewHolder, pos: Int, payloads: MutableList<Any>) {
+        if (payloads.isEmpty()) {
+            onBindViewHolder(holder, pos)
+            return
+        }
+    }
+
     override fun onBindViewHolder(holder: RatesViewHolder, position: Int) {
         holder.bind(rates[position], ::onItemClicked)
     }
 
     fun updateRates(rates: List<Rate>) {
-        val result = DiffUtil.calculateDiff(RatesDiffUtilCallback(rates, this.rates))
-        this.rates.clear()
-        this.rates.addAll(rates)
+        val newRates = sortRates(rates)
+        setRates(newRates)
+    }
+
+    private fun setRates(newRates: List<Rate>) {
+        val result = DiffUtil.calculateDiff(RatesDiffUtilCallback(newRates, this.rates))
+        this.rates = newRates
         result.dispatchUpdatesTo(this)
     }
 
     private fun onItemClicked(position: Int) {
         onSymbolSelected(rates[position].symbol)
-        val item = rates.removeAt(position)
-        rates.add(0, item)
-        notifyItemMoved(position, 0)
+        val rates = this.rates.swap(position)
+        setRates(rates)
         recyclerView.scrollToPosition(0)
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         this.recyclerView = recyclerView
+    }
+
+    private fun sortRates(rates: List<Rate>): List<Rate> {
+        if (this.rates.isEmpty()) {
+            return rates
+        }
+        val mapped = rates.associateBy { it.symbol }
+        return this.rates
+            .map { rate -> mapped[rate.symbol] }
+            .filterNotNull()
     }
 }

@@ -5,9 +5,11 @@ import com.pppp.currencies.data.pokos.Rate
 
 interface RatesViewModel {
 
-
     fun changeBase(base: String)
+
     val data: MutableLiveData<List<Rate>>
+
     fun subscribe()
+
     fun unsubscribe()
 }

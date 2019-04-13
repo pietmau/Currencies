@@ -32,7 +32,9 @@ class RxGetRatesUseCase(
             // In any case we start with the default
             .startWith(DEFAULT_CURRENCY)
             // Every time the base changes it restarts polling the rates
-            .switchMap { getRates(it) }
+            .switchMap { base ->
+                getRates(base)
+            }
             .observeOn(mainScheduler)
             .subscribe({
                 success?.invoke(it)

@@ -15,5 +15,5 @@ class RatesDiffUtilCallback(private val newRates: List<Rate>, private val oldRat
     override fun getNewListSize() = newRates.size
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-        newRates[newItemPosition] == oldRates[oldItemPosition]
+        newRates[newItemPosition].equals(oldRates[oldItemPosition])
 }

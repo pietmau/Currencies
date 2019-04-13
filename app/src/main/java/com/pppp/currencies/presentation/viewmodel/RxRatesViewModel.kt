@@ -1,6 +1,5 @@
 package com.pppp.currencies.presentation.viewmodel
 
-import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.pppp.currencies.data.pokos.Rate
@@ -10,8 +9,7 @@ import io.reactivex.subjects.Subject
 
 //TODO careful with memory leaks!!!
 // TODO implemnet retry!!!
-class RxRatesViewModel(private val useCase: GetRatesUseCase) : ViewModel(), RatesViewModel,
-    LifecycleObserver {
+class RxRatesViewModel(private val useCase: GetRatesUseCase) : ViewModel(), RatesViewModel {
     override val data: MutableLiveData<List<Rate>> = MutableLiveData()
     private val subject: Subject<String> = BehaviorSubject.create()
 
