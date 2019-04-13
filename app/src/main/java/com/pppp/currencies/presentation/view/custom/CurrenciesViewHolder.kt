@@ -13,19 +13,32 @@ class CurrenciesViewHolder(
 ) :
     RecyclerView.ViewHolder(view) {
 
-    fun bind(currency: Currency, clickListener: (Int) -> Unit) {
+    fun bind(
+        currency: Currency,
+        clickListener: (Int) -> Unit,
+        amountListener: (Int, String) -> Unit,
+        isBase: Boolean
+    ) {
         itemView.symbol.text = currency.symbol
         itemView.country.text = currency.country
-        itemView.amount.setText(currencyFormatter.format(currency.amount))
+        itemView.amount_input.setText(currencyFormatter.format(currency.amount))
         imageLoader.loadImage(currency.url, itemView.flag)
         itemView.setOnClickListener {
             clickListener(adapterPosition)
         }
+        itemView.amount_input.addTextChangedListener(SimpleTextWatcher({
+            amountListener(adapterPosition, it)
+        }))
+        enableInputField(isBase)
     }
 
-    fun onNewAmount(payload: Any) {
+    private fun enableInputField(enable: Boolean) {
+        itemView.amount_input.isEnabled = enable
+    }
+
+    fun bindNewAmount(payload: Any) {
         val currency = currencyFormatter.format((payload as Currency).amount)
-        itemView.amount.setText(currency)//TODO use NumberFormat
+        itemView.amount_input.setText(currency)//TODO use NumberFormat
     }
 
 }

@@ -17,9 +17,10 @@ class CurrenciesAdapter() : RecyclerView.Adapter<CurrenciesViewHolder>() {
     private val imageLoader: ImageLoader = PicassoImageLoader()
     private var currencies: List<Currency> = listOf()
     lateinit var onCurrencyClicked: (String, BigDecimal) -> Unit
+    lateinit var onAmountChanged: (String, String) -> Unit
 
     init {
-        setHasStableIds(true)
+        setHasStableIds(true)//TODO does it actually do anything?
     }
 
     override fun getItemCount() = currencies.size
@@ -41,11 +42,15 @@ class CurrenciesAdapter() : RecyclerView.Adapter<CurrenciesViewHolder>() {
             onBindViewHolder(holder, position)
             return
         }
-        holder.onNewAmount(payloads[0])
+        holder.bindNewAmount(payloads[0])
     }
 
     override fun onBindViewHolder(holder: CurrenciesViewHolder, position: Int) {
-        holder.bind(currencies[position], ::onItemClicked)
+        holder.bind(currencies[position], ::onItemClicked, ::onAmountChanged, position == 0)
+    }
+
+    private fun onAmountChanged(position: Int, amount: String) {
+        onAmountChanged(currencies[position].symbol, amount)//TODO position not really neeeded
     }
 
     fun updateRates(currencies: List<Currency>) {
@@ -54,16 +59,15 @@ class CurrenciesAdapter() : RecyclerView.Adapter<CurrenciesViewHolder>() {
     }
 
     private fun setRates(newCurrencies: List<Currency>) {
-        val result =
-            DiffUtil.calculateDiff(CurrenciesDiffUtilCallback(newCurrencies, this.currencies))
-        this.currencies = newCurrencies
+        val result = DiffUtil.calculateDiff(CurrencyDiffCallback(newCurrencies, currencies))
+        currencies = newCurrencies
         result.dispatchUpdatesTo(this)
     }
 
     private fun onItemClicked(position: Int) {
         val newBase = currencies[position]
         onCurrencyClicked(newBase.symbol, newBase.amount)
-        val swapped = this.currencies.swap(position)
+        val swapped = currencies.swap(position)
         setRates(swapped)
         recyclerView.scrollToPosition(0)
     }
@@ -72,6 +76,7 @@ class CurrenciesAdapter() : RecyclerView.Adapter<CurrenciesViewHolder>() {
         this.recyclerView = recyclerView
     }
 
+    // TODO comment
     private fun sortRates(currencies: List<Currency>): List<Currency> {
         if (this.currencies.isEmpty()) {
             return currencies

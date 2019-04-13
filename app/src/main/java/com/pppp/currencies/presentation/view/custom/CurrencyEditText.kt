@@ -5,12 +5,12 @@ import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatEditText
 
 
-class CurrencyEditText constructor(
+class CurrencyEditText constructor( // TODO REMOVE?
     context: Context,
     attrs: AttributeSet
 ) : AppCompatEditText(context, attrs) {
 
     init {
-        filters = arrayOf(DecimalDigitsInputFilter(4, 2))
+        filters = arrayOf(DecimalDigitsInputFilter(4, 4))
     }
 }

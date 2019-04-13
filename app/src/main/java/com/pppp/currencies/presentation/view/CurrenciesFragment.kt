@@ -28,6 +28,9 @@ class CurrenciesFragment : Fragment() {
         recycler.onCurrencyClicked = { baseSymbol, baseAmount ->
             viewModel.changeBase(baseSymbol, baseAmount)
         }
+        recycler.onAmountChanged = { symbol, amount ->
+
+        }
         viewModel.data.observe(requireActivity(), Observer(recycler::updateRates))
     }
 

@@ -19,6 +19,12 @@ class CurrenciesRecycler @JvmOverloads constructor(
             currenciesAdapter.onCurrencyClicked = value
         }
 
+    var onAmountChanged: (String, String) -> Unit = { _, _ -> }
+        set(value) {
+            currenciesAdapter.onAmountChanged = value
+        }
+
+
     private val currenciesAdapter: CurrenciesAdapter
         get() = adapter as CurrenciesAdapter
 

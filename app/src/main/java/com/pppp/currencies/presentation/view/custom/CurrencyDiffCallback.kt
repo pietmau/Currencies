@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.DiffUtil
 import com.pppp.currencies.data.pokos.Currency
 
 //TODO execute on a different thread
-class CurrenciesDiffUtilCallback(
+class CurrencyDiffCallback(
     private val newCurrencies: List<Currency>,
     private val oldCurrencies: List<Currency>
 ) :
