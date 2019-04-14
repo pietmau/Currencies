@@ -39,8 +39,6 @@ c
 3app/src/main/java/com/pppp/currencies/extensions.kt,4/1/41f37ba114b1f01c1f97a01c79fa226ab2f0172d
 w
 Gapp/src/main/java/com/pppp/currencies/data/network/api/CurrenciesApi.kt,2/7/279597e7394b89d777b2f67f60602c50ab251fe1
-l
-<app/src/main/java/com/pppp/currencies/data/pokos/Currency.kt,a/b/ab6453254948ea9fc6982f79c0cba8518a66af6a
 †
 Vapp/src/main/java/com/pppp/currencies/presentation/view/custom/CurrenciesViewHolder.kt,6/6/664df521611151ddefca3a58db5b9cdc51ae669b
 ‹
@@ -53,10 +51,6 @@ h
 8app/src/main/java/com/pppp/currencies/app/CurrencyApp.kt,f/9/f99d1c44dc18f380764085466f0682b97b05d10d
 v
 Fapp/src/main/java/com/pppp/currencies/data/rates/CurrenciesResponse.kt,f/c/fcf9674597f1dcbcb73a0aae1fbefdc69d770f83
-
-Oapp/src/main/java/com/pppp/currencies/domain/usecases/RxGetCurrenciesUseCase.kt,e/e/eee4445b896ec5094ec4c269c4597c3ca0026d4a
-}
-Mapp/src/main/java/com/pppp/currencies/domain/usecases/GetCurrenciesUseCase.kt,7/1/71ea35c33d939de02393e56c36f397ab60ddc08d
 …
 Uapp/src/main/java/com/pppp/currencies/presentation/viewmodel/RxCurrenciesViewModel.kt,a/d/ad5a1b9bb64bb10b35a686cc93bf09b68c7c6ddb
 }
@@ -69,8 +63,6 @@ Xapp/src/test/java/com/pppp/currencies/presentation/viewmodel/InstantExecutorExt
 app/app.iml,7/c/7c1d2a1927c01fa75a9b4c74ea8addcc06b327ae
 †
 Vapp/src/main/java/com/pppp/currencies/presentation/view/custom/CurrencyDiffCallback.kt,4/c/4c46b36dec682853e7ed281ccbedc2232b5069da
-s
-Capp/src/main/java/com/pppp/currencies/data/repository/Repository.kt,a/7/a79d311122e30f24d0ad8b2f6da7d2b406a98806
 ‰
 Yapp/src/test/java/com/pppp/currencies/presentation/viewmodel/RxCurrenciesViewModelTest.kt,4/4/4439119612e0d628faeb13c1365bd6b46d38cd2b
 ƒ
@@ -89,3 +81,27 @@ p
 @app/src/androidTest/java/com/pppp/currencies/TestAppComponent.kt,b/d/bd5a6301b4c6b4e1f0f234597324ddc613a51a09
 w
 Gapp/src/main/java/com/pppp/currencies/app/di/ProdCurrenciesComponent.kt,6/2/626af6f1fe22ca604b97e1b7ab967cdebccfeca5
+A
+gradle.properties,2/a/2afbb999f001938c88fa43fc2ef52abf0f8213e4
+X
+(gradle/wrapper/gradle-wrapper.properties,f/b/fbe448ebfc3eb2d4e308f6b8b043666f5b57235e
+n
+>app/src/main/java/com/pppp/currencies/app/di/ActivityModule.kt,2/3/238ff6da41616f0126aaa8e8679eb6fc3467e5dd
+e
+5app/src/androidTest/java/com/pppp/currencies/utils.kt,a/0/a069045cba5b1f9038a6e5fd6f98dd6b2a3b949a
+w
+Gapp/src/androidTest/java/com/pppp/currencies/TestCurrenciesViewModel.kt,a/2/a26ceb2741d3c7f0937a128d34a0487a3291a3df
+?
+settings.gradle,0/5/05efc8b1657769a27696d478ded1e95f38737233
+D
+uscases/build.gradle,f/c/fc16cde5c9423728caa1d03cc58e524bcf40c6c8
+h
+8uscases/src/main/java/com/pppp/uscases/pokos/Currency.kt,3/2/324f88ae420b0c001c41eb88fe8d6f5a4fe593bc
+y
+Iuscases/src/main/java/com/pppp/uscases/usecases/RxGetCurrenciesUseCase.kt,c/a/ca45cb29920dde76d2e35c98dc0f8b12089153f1
+w
+Guscases/src/main/java/com/pppp/uscases/usecases/GetCurrenciesUseCase.kt,f/1/f1e9f7598af78533d79b4391dc8d09c7898fa760
+d
+4uscases/src/main/java/com/pppp/uscases/Repository.kt,6/c/6c72bd6f3ae17b5661da96867cbd82a353472baa
+x
+Happ/src/main/java/com/pppp/currencies/data/repository/CurrencyCreator.kt,6/6/66ceee2e0544821c5be85a9cf8e1b081862c1f09
