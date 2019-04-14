@@ -1,3 +1,5 @@
+
+- COMMENTS!!!
 - coroutines
 - USE A SERVICE!
 - HTTP chaching!!!
@@ -7,3 +9,4 @@
 - implement Retry!!!
 - modularize
 - bettern aname for reposoiyty
+- use retrofit converter

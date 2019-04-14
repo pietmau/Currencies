@@ -5,9 +5,7 @@ import com.pppp.currencies.data.pokos.Currency
 import com.pppp.currencies.swap
 
 class CurrenciesAdapterDelegate {
-
     private var currencies: List<Currency> = listOf()
-
     val size: Int
         get() = currencies.size
 
