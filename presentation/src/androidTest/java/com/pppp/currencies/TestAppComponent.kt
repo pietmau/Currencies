@@ -14,7 +14,7 @@ abstract class TestAppComponent : AppComponent {
     abstract override fun with(module: ActivityModule): TestCurrenciesComponent
 }
 
-
+// We provide the test dependency here
 @Module
 class TestAppModule(val viewModel: CurrenciesViewModel) {
 
@@ -22,10 +22,6 @@ class TestAppModule(val viewModel: CurrenciesViewModel) {
     fun providesViewModel(): CurrenciesViewModel = viewModel
 }
 
-@Subcomponent(modules = [TestCurrenciesModule::class, ActivityModule::class])
-abstract class TestCurrenciesComponent : CurrenciesComponent {
-
-}
-
-@Module
-class TestCurrenciesModule
+// It does nothing, so that we can use the TestAppModule to inject what we want
+@Subcomponent(modules = [ActivityModule::class])
+abstract class TestCurrenciesComponent : CurrenciesComponent
