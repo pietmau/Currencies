@@ -20,10 +20,7 @@ class CurrenciesFragmentInstrumentedTest {
             val instrumentation = InstrumentationRegistry.getInstrumentation()
             val app = instrumentation.targetContext.applicationContext as CurrencyApp
             val appComponent = DaggerTestAppComponent.create()
-//            modelSource = DetailSource()
-//            val appModule = TestAppModule(detailModelSource = modelSource, imageLoader = MockLoader)
-//            val component = builder.testAppModule(appModule).build()
-//            app.component = component
+            app.component = appComponent
         }
     }
 
