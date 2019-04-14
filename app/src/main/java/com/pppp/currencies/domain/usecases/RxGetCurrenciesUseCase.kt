@@ -5,28 +5,21 @@ import com.pppp.currencies.data.repository.Repository
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 
-// TODO retry on error!
-
 const val DEFAULT_CURRENCY = "EUR"
 
-/**
- * Emission does not happen on the main thread, because we start//TODO
- */
 class RxGetCurrenciesUseCase(
     private val repository: Repository,
-    private val mainScheduler: Scheduler = AndroidSchedulers.mainThread()
+    private val mainScheduler: Scheduler = AndroidSchedulers.mainThread(),
+    private val ioScheduler: Scheduler = Schedulers.io(),
+    private val subscriptions: CompositeDisposable = CompositeDisposable()
 ) :
     GetCurrenciesUseCase {
-
-    private var subscription: Disposable? = null
-
-    private var ldsdsd: List<Currency>? = null
 
     override fun subscribe(
         baseCurrency: Observable<Pair<String, BigDecimal>>,
@@ -35,9 +28,9 @@ class RxGetCurrenciesUseCase(
     ) {
         val currencies = baseCurrency.startWith(Pair(DEFAULT_CURRENCY, BigDecimal(1)))
         val seconds = Observable.interval(1, TimeUnit.SECONDS)
-        subscription = seconds
+        val subscription = seconds
             .withLatestFrom(currencies, biFunction)
-            .subscribeOn(Schedulers.io())
+            .subscribeOn(ioScheduler)
             .flatMap { (baseSymbol, baseAmount) ->
                 repository.getCurrencies(baseSymbol, baseAmount)
             }
@@ -47,10 +40,11 @@ class RxGetCurrenciesUseCase(
             }, {
                 failure?.invoke(it)
             })
+        subscriptions.add(subscription)
     }
 
     override fun unSubscribe() {
-        subscription?.dispose()
+        subscriptions.clear()
     }
 
     private val biFunction =

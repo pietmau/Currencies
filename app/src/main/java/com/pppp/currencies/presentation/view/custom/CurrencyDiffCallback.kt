@@ -1,6 +1,5 @@
 package com.pppp.currencies.presentation.view.custom
 
-import android.util.Log
 import androidx.recyclerview.widget.DiffUtil
 import com.pppp.currencies.data.pokos.Currency
 
@@ -22,9 +21,6 @@ class CurrencyDiffCallback(
         newCurrencies[newItemPosition].equals(oldCurrencies[oldItemPosition])
 
 
-    override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
-        Log.e("foo", "new " + newCurrencies[newItemPosition].toString())
-        Log.e("foo", "old " + oldCurrencies[oldItemPosition].toString())
-        return newCurrencies[newItemPosition]
-    }
+    override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int) =
+        newCurrencies[newItemPosition]
 }

@@ -7,8 +7,8 @@ import com.pppp.currencies.domain.usecases.GetCurrenciesUseCase
 import io.mockk.*
 import io.reactivex.subjects.Subject
 import junit.framework.Assert.assertEquals
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import java.math.BigDecimal
 
@@ -61,6 +61,14 @@ internal class RxCurrenciesViewModelTest {
         val list = listOf(currency)
         succcess.captured.invoke(list)
         assertEquals(list, liveData.value)
+    }
+
+    @Test
+    fun `when usnsubscribes then unsubscribes`() {
+        // WHEN
+        viewModel.unsubscribe()
+        // THEN
+        verify { useCase.unSubscribe() }
     }
 
     private fun changeBase(): String {

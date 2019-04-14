@@ -24,6 +24,7 @@ class CurrenciesViewHolder(
         imageLoader.loadImage(currency.url, itemView.flag)
         itemView.setOnClickListener {
             clickListener(adapterPosition)
+            itemView.amount_input.requestFocus()
         }
         itemView.amount_input.addTextChangedListener(SimpleTextWatcher({
             amountListener?.invoke(adapterPosition, it)
