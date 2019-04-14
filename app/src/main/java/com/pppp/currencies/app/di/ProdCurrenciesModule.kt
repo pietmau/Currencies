@@ -15,14 +15,15 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class ProdCurrenciesModule(private val activity: FragmentActivity): CurrenciesModule {
+class ProdCurrenciesModule(private val activity: FragmentActivity) : CurrenciesModule {
 
     @Provides
     fun providesViewModel(factory: ViewModelProvider.Factory): CurrenciesViewModel =
         ViewModelProviders.of(activity, factory).get(RxCurrenciesViewModel::class.java)
 
     @Provides
-    internal fun providesUseCase(mapper: Repository): GetCurrenciesUseCase = RxGetCurrenciesUseCase(mapper)
+    internal fun providesUseCase(mapper: Repository): GetCurrenciesUseCase =
+        RxGetCurrenciesUseCase(mapper)
 
     @Provides
     internal fun provideMapper(client: Client): Repository =
@@ -36,11 +37,12 @@ class ProdCurrenciesModule(private val activity: FragmentActivity): CurrenciesMo
         RatesViewModelFactory(uscase)
 }
 
-class RatesViewModelFactory(private val useCase: GetCurrenciesUseCase) : ViewModelProvider.Factory {
-
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T = RxCurrenciesViewModel(useCase) as T
-}
-
 interface CurrenciesModule {
 
+}
+
+class RatesViewModelFactory(private val useCase: GetCurrenciesUseCase) : ViewModelProvider.Factory {
+
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T =
+        RxCurrenciesViewModel(useCase) as T
 }
