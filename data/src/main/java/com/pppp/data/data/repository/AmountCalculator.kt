@@ -15,6 +15,5 @@ class AmountCalculator {
     } catch (e: Exception) {
         null
     }
-
 }
 

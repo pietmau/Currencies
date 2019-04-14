@@ -11,6 +11,8 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 
+private const val GBP = "GBP"
+
 internal class RxGetCurrenciesUseCaseTest {
     private val repository: Repository = mockk()
     private val mainScheduler: Scheduler = Schedulers.trampoline()
@@ -66,15 +68,32 @@ internal class RxGetCurrenciesUseCaseTest {
     @Test
     fun `when failure then failure`() {
         // GIVEN
-        val exception = Exception()
-        every { repository.getCurrencies(any(), any()) } throws exception
+        throwException()
         // WHEN
-        usecase.subscribe(Observable.just(Pair("GBP", BigDecimal(1))), failure = failure)
+        usecase.subscribe(Observable.just(Pair(GBP, BigDecimal(1))), failure = failure)
         // THEN
         // unfortunately we must do this, because the emission is every 1 second
         Thread.sleep(1100)
         verify { failure(ofType<Exception>()) }
         confirmVerified(failure)
+    }
+
+    @Test
+    fun `when error then retries`() {
+        // GIVEN
+        throwException()
+        // WHEN
+        usecase.subscribe(Observable.just(Pair(GBP, BigDecimal(1))))
+        // THEN
+        // unfortunately we must do this, because the emission is every 1 second
+        Thread.sleep(4100)
+        verify(exactly = 2) { repository.getCurrencies(any(),any()) }
+        confirmVerified(failure)
+    }
+
+    private fun throwException() {
+        val exception = Exception()
+        every { repository.getCurrencies(any(), any()) } throws exception
     }
 
     @Test
@@ -90,7 +109,7 @@ internal class RxGetCurrenciesUseCaseTest {
         val emptyList = emptyList<Currency>()
         every { repository.getCurrencies(any(), any()) } returns Observable.just(emptyList)
         // WHEN
-        usecase.subscribe(Observable.just(Pair("GBP", BigDecimal(1))), success)
+        usecase.subscribe(Observable.just(Pair(GBP, BigDecimal(1))), success)
         return emptyList
     }
 }

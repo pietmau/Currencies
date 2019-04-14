@@ -1,8 +1,7 @@
-
 ## MVVM
-- The View (the `CurrenciesFragment`) binds to `RxCurrenciesViewModel` via LiveData.
+- The View (`CurrenciesFragment`) binds to `RxCurrenciesViewModel` via LiveData.
 
-- The ViewModel communicates with the UseCase (`RxGetCurrenciesUseCase`) with RxJava.
+- The ViewModel communicates with the UseCase (`RxGetCurrenciesUseCase`) via RxJava.
 
 The reason of this mixture is that it would be interesting to implement the ViewModel with Coroutines (TODO).
 Having the presentation not relying on RxJava would allow us to do so.
@@ -16,7 +15,6 @@ It implements retry.
 
 It is retained across config changes via `ViewModel` (Architecture Components).
 
-
 ## Modularity & Clean Architecture
 The project is composed of three modules:
 - **Presentation** (Android application)
@@ -28,7 +26,6 @@ The project is composed of three modules:
 **Data** depends on **Domain**
 
 **Domain** does not depend on any other module.
-
 
 ## Tests
 There are Unit tests (**Junit 5**) and **Espresso** tests in the respective directories:
@@ -51,6 +48,8 @@ The `CurrenciesRecycler` uses `DiffUtils` and `Payloads` to update the rows effi
 - Dagger
 - AndroidX
 
+## Currency
+Money is represented with `BigDecimal`.
 
 ## TODO
 - Explain things a bit better (especially around RxJava).
