@@ -25,8 +25,7 @@ class RxCurrenciesViewModel(
     }
 
     override fun changeBaseAmount(baseSymbol: String, baseAmount: String) {
-        amountCalculator.parseAmount(baseAmount)
-            ?.let { changeBase(baseSymbol, it) }
+        amountCalculator.parseAmount(baseAmount)?.let { changeBase(baseSymbol, it) }
     }
 
     override fun subscribe() {

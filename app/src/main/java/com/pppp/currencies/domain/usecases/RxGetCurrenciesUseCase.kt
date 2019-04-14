@@ -28,8 +28,11 @@ class RxGetCurrenciesUseCase(
         success: ((List<Currency>) -> Unit)?,
         failure: ((Throwable) -> Unit)?
     ) {
+
         val currencies = baseCurrency.startWith(Pair(DEFAULT_CURRENCY, BigDecimal(1)))
+
         val seconds = Observable.interval(1, TimeUnit.SECONDS)
+
         val subscription = seconds
             .withLatestFrom(currencies, function)
             .subscribeOn(ioScheduler)
