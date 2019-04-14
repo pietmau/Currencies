@@ -1,9 +1,12 @@
 package com.pppp.currencies.app.di
 
 import com.pppp.currencies.presentation.view.CurrenciesFragment
-import dagger.Component
+import dagger.Subcomponent
 
-@Component(modules = [CurrenciesModule::class])
+/**
+ * Only so that we can swap dependencies during Espresso tests.
+ */
+@Subcomponent(modules = [ProdCurrenciesModule::class])
 interface CurrenciesComponent {
     fun inject(currenciesFragment: CurrenciesFragment)
 }

@@ -4,9 +4,9 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import com.pppp.currencies.data.repository.*
 import com.pppp.currencies.data.network.client.Client
 import com.pppp.currencies.data.network.client.RetrofitClient
+import com.pppp.currencies.data.repository.*
 import com.pppp.currencies.domain.usecases.GetCurrenciesUseCase
 import com.pppp.currencies.domain.usecases.RxGetCurrenciesUseCase
 import com.pppp.currencies.presentation.viewmodel.CurrenciesViewModel
@@ -15,7 +15,7 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class CurrenciesModule(private val activity: FragmentActivity) {
+class ProdCurrenciesModule(private val activity: FragmentActivity): CurrenciesModule {
 
     @Provides
     fun providesViewModel(factory: ViewModelProvider.Factory): CurrenciesViewModel =
@@ -39,4 +39,8 @@ class CurrenciesModule(private val activity: FragmentActivity) {
 class RatesViewModelFactory(private val useCase: GetCurrenciesUseCase) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T = RxCurrenciesViewModel(useCase) as T
+}
+
+interface CurrenciesModule {
+
 }

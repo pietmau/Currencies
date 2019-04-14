@@ -5,6 +5,7 @@ import com.squareup.leakcanary.LeakCanary
 
 
 class CurrencyApp : Application() {
+    var component: ProdAppComponent? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -12,5 +13,6 @@ class CurrencyApp : Application() {
             return
         }
         LeakCanary.install(this)
+        component = DaggerProdAppComponent.create()
     }
 }
