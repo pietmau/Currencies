@@ -18,8 +18,8 @@ internal class RxGetCurrenciesUseCaseTest {
     private val subscriptions: CompositeDisposable = mockk(relaxed = true)
     private lateinit var usecase: RxGetCurrenciesUseCase
     private val success: (List<Currency>) -> Unit = mockk(relaxed = true)
-    private val failure: (Throwable) -> Unit = mockk()
-    private val slot = slot<List<Currency>>()
+    private val failure: (Throwable) -> Unit = mockk(relaxed = true)
+    private val slot = slot<Throwable>()
 
     @BeforeEach
     internal fun setUp() {
@@ -68,7 +68,7 @@ internal class RxGetCurrenciesUseCaseTest {
         // THEN
         // unfortunately we must do this, because the emission is every 1 second
         Thread.sleep(1100)
-        verify { failure(exception) }
+        verify { failure(ofType<Exception>()) }
         confirmVerified(failure)
     }
 
