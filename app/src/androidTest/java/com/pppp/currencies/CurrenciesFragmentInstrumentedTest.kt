@@ -13,6 +13,7 @@ import com.pppp.currencies.app.CurrencyApp
 import com.pppp.currencies.data.pokos.Currency
 import com.pppp.currencies.presentation.view.CurrenciesActivity
 import com.pppp.currencies.presentation.view.custom.CurrenciesViewHolder
+import org.hamcrest.CoreMatchers.not
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -25,9 +26,10 @@ private const val UK = "uk"
 
 @RunWith(AndroidJUnit4::class)
 class CurrenciesFragmentInstrumentedTest {
-    private val data: MutableLiveData<List<Currency>> = MutableLiveData()
+    private val currencies: MutableLiveData<List<Currency>> = MutableLiveData()
     private val itl = Currency(ITL, "", BigDecimal(1), COUNTRY, "www")
     private val gbp = Currency(GBP, "", BigDecimal(2), UK, "www")
+    private val loading: MutableLiveData<Boolean> = MutableLiveData()
 
     @get:Rule
     var activityRule: ActivityTestRule<CurrenciesActivity> = object :
@@ -35,26 +37,55 @@ class CurrenciesFragmentInstrumentedTest {
         override fun beforeActivityLaunched() {
             val instrumentation = InstrumentationRegistry.getInstrumentation()
             val app = instrumentation.targetContext.applicationContext as CurrencyApp
-            val viewmodel = TestCurrenciesViewModel(data)
+            val viewmodel = TestCurrenciesViewModel(currencies, loading)
             val builder = DaggerTestAppComponent.builder()
-            val appComponent = builder.testAppModule(TestAppModule(viewmodel)).build()
-            app.component = appComponent
+            app.component = builder.testAppModule(TestAppModule(viewmodel)).build()
         }
     }
 
     @Test
-    fun when_receives_then_shows() {
+    fun when_starts_then_progress_shows() {
+        onView(withId(R.id.progress)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun when_receives_currencies_then_progress_hides() {
+        // WHEN
+        loading.postValue(false)
+        // THEN
+        onView(withId(R.id.progress)).check(matches(not(isDisplayed())))
+    }
+
+    @Test
+    fun when_receives_currencies_then_shows() {
         //WHEN
-        data.postValue(listOf(itl))
+        currencies.postValue(listOf(itl, gbp))
         // THEN
         checkItemAtPosition()
     }
 
+    @Test
+    fun when_updates_currencies_then_shows() {
+        //WHEN
+        currencies.postValue(listOf(itl, gbp))
+        checkItemAtPosition()
+        checkItemAtPosition(1, GBP, UK, "2.0000")
+        // THEN
+        currencies.postValue(
+            listOf(
+                itl.copy(amount = BigDecimal(3)),
+                gbp.copy(amount = BigDecimal(4))
+            )
+        )
+        // the first item des not get updated when we receive data from the network
+        checkItemAtPosition()
+        checkItemAtPosition(1, GBP, UK, "4.0000")
+    }
 
     @Test
-    fun when_click_then_movestoTop() {
+    fun when_click_then_moves_to_top() {
         //WHEN
-        data.postValue(listOf(itl, gbp))
+        currencies.postValue(listOf(itl, gbp))
         // THEN
         checkItemAtPosition()
         checkItemAtPosition(1, GBP, UK, "2.0000")
@@ -62,6 +93,17 @@ class CurrenciesFragmentInstrumentedTest {
             .perform(RecyclerViewActions.actionOnItemAtPosition<CurrenciesViewHolder>(1, click()))
         checkItemAtPosition(0, GBP, UK, "2.0000")
         checkItemAtPosition(1)
+    }
+
+    @Test
+    fun when_clicks_then_gets_focus() {
+        //WHEN
+        currencies.postValue(listOf(itl, gbp))
+        onView(withId(R.id.recycler))
+            .perform(RecyclerViewActions.actionOnItemAtPosition<CurrenciesViewHolder>(1, click()))
+        // THEN
+        onView(withId(R.id.recycler)).check(matches(atPosition(1, not(editTextHasFocus()))))
+        onView(withId(R.id.recycler)).check(matches(atPosition(0, editTextHasFocus())))
     }
 
     private fun checkItemAtPosition(

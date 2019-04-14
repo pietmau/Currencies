@@ -6,7 +6,9 @@ import java.math.BigDecimal
 
 interface CurrenciesViewModel {
 
-    val data: MutableLiveData<List<Currency>>
+    val currencies: MutableLiveData<List<Currency>>
+
+    val loading: MutableLiveData<Boolean>
 
     fun changeBase(symbol: String, amount: BigDecimal)
 

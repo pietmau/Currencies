@@ -20,7 +20,6 @@ class CurrencyDiffCallback(
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
         newCurrencies[newItemPosition].equals(oldCurrencies[oldItemPosition])
 
-
     override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int) =
         newCurrencies[newItemPosition]
 }

@@ -1,8 +1,10 @@
 package com.pppp.currencies
 
 import android.view.View
+import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.matcher.BoundedMatcher
+import org.hamcrest.BaseMatcher
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 
@@ -21,5 +23,16 @@ fun atPosition(position: Int, itemMatcher: Matcher<View>): Matcher<View> {
                 return false
             return itemMatcher.matches(viewHolder.itemView)
         }
+    }
+}
+
+fun editTextHasFocus(): Matcher<View> {
+    return object : BaseMatcher<View>() {
+        override fun describeTo(description: Description?) {
+
+        }
+
+        override fun matches(item: Any?) =
+            (item as View).findViewById<EditText>(R.id.amount_input).hasFocus()
     }
 }

@@ -13,7 +13,8 @@ class RxCurrenciesViewModel(
     private val currenciesUseCase: GetCurrenciesUseCase,
     private val amountCalculator: AmountCalculator = AmountCalculator(),
     private val subject: Subject<Pair<String, BigDecimal>> = BehaviorSubject.create(),
-    override val data: MutableLiveData<List<Currency>> = MutableLiveData()
+    override val currencies: MutableLiveData<List<Currency>> = MutableLiveData(),
+    override val loading: MutableLiveData<Boolean> = MutableLiveData()
 ) :
     CurrenciesViewModel,
     ViewModel() {
@@ -28,12 +29,16 @@ class RxCurrenciesViewModel(
     }
 
     override fun subscribe() {
-        currenciesUseCase.subscribe(base = subject, success = {
-            data.postValue(it)
-        })
+        currenciesUseCase.subscribe(base = subject, success = ::emitCurrenciesList)
+    }
+
+    private fun emitCurrenciesList(list: List<Currency>) {
+        currencies.postValue(list)
+        loading.postValue(false)
     }
 
     override fun unsubscribe() {
         currenciesUseCase.unSubscribe()
+        loading.postValue(false)
     }
 }

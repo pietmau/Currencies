@@ -3,6 +3,8 @@ package com.pppp.currencies.presentation.view
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -33,7 +35,10 @@ class CurrenciesFragment : Fragment() {
         recycler.onAmountChanged = { baseSymbol, baseAmount ->
             viewModel.changeBaseAmount(baseSymbol, baseAmount)
         }
-        viewModel.data.observe(requireActivity(), Observer(recycler::updateRates))
+        viewModel.currencies.observe(requireActivity(), Observer(recycler::updateRates))
+        viewModel.loading.observe(requireActivity(), Observer() { show ->
+            progress.visibility = if (show) VISIBLE else GONE
+        })
     }
 
     override fun onCreateView(

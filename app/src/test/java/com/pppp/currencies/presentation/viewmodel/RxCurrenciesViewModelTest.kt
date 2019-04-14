@@ -20,14 +20,15 @@ internal class RxCurrenciesViewModelTest {
     private val amountCalculator: AmountCalculator = mockk()
     private lateinit var viewModel: RxCurrenciesViewModel
     private val subject: Subject<Pair<String, BigDecimal>> = mockk(relaxed = true)
-    private val slot = slot<Pair<String, BigDecimal>>()
+    private val pair = slot<Pair<String, BigDecimal>>()
     private val succcess = slot<(List<Currency>) -> Unit>()
-    private val liveData: MutableLiveData<List<Currency>> = mockk()
+    private val currencies: MutableLiveData<List<Currency>> = mockk(relaxed = true)
+    private val loading: MutableLiveData<Boolean> = mockk(relaxed = true)
     private val currency: Currency = mockk()
 
     @BeforeEach
     fun setUp() {
-        viewModel = RxCurrenciesViewModel(useCase, amountCalculator, subject, liveData)
+        viewModel = RxCurrenciesViewModel(useCase, amountCalculator, subject, currencies, loading)
     }
 
     @Test
@@ -44,27 +45,40 @@ internal class RxCurrenciesViewModelTest {
         // WHEN
         val baseAmount = changeBase()
         // THEN
-        verify { subject.onNext(capture(slot)) }
-        assertEquals(BigDecimal(baseAmount), slot.captured.second)
-        assertEquals(SYMBOL, slot.captured.first)
+        verify { subject.onNext(capture(pair)) }
+        assertEquals(BigDecimal(baseAmount), pair.captured.second)
+        assertEquals(SYMBOL, pair.captured.first)
         confirmVerified(subject)
     }
 
     @Test
-    fun `when subscribes amount pushes to subject`() {
+    fun `when gets data pushes to live data`() {
         val liveData = MutableLiveData<List<Currency>>()
         val viewModel = RxCurrenciesViewModel(useCase, amountCalculator, subject, liveData)
         // WHEN
-        viewModel.subscribe()
+        val list = getsData(viewModel)
         // THEN
-        verify { useCase.subscribe(subject, capture(succcess), any()) }
-        val list = listOf(currency)
-        succcess.captured.invoke(list)
         assertEquals(list, liveData.value)
     }
 
     @Test
-    fun `when usnsubscribes then unsubscribes`() {
+    fun `when unsubscribes then hides progress`() {
+        // WHEN
+        viewModel.unsubscribe()
+        // THEN
+        verify { loading.postValue(false) }
+    }
+
+    @Test
+    fun `when gets data then hides progress`() {
+        // WHEN
+        getsData(viewModel)
+        // THEN
+        verify { loading.postValue(false) }
+    }
+
+    @Test
+    fun `when unsubscribe then unsubscribes`() {
         // WHEN
         viewModel.unsubscribe()
         // THEN
@@ -76,5 +90,13 @@ internal class RxCurrenciesViewModelTest {
         val baseAmount = "1"
         viewModel.changeBaseAmount(SYMBOL, baseAmount)
         return baseAmount
+    }
+
+    private fun getsData(viewModel: RxCurrenciesViewModel): List<Currency> {
+        viewModel.subscribe()
+        verify { useCase.subscribe(subject, capture(succcess), any()) }
+        val list = listOf(currency)
+        succcess.captured.invoke(list)
+        return list
     }
 }
