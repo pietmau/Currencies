@@ -22,8 +22,6 @@ There are Unit tests (Junit 5) and Espresso tests in the respective directories.
 - coroutines
 - USE A SERVICE!
 - Fix edditezt to get only valid numbers
-- FIX NAMES (currency not rates)
-- modularize
 - bettern aname for reposoiyty
 - use retrofit converter
 - colori!

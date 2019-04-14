@@ -19,7 +19,7 @@ class CurrenciesViewHolder(
         amountListener: ((Int, String) -> Unit)?
     ) {
         itemView.symbol.text = currency.symbol
-        itemView.country.text = currency.country
+        itemView.country.text = currency.name
         itemView.amount_input.setText(currencyFormatter.format(currency.amount))
         imageLoader.loadImage(currency.url, itemView.flag)
         itemView.setOnClickListener {
