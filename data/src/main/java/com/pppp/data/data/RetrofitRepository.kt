@@ -1,12 +1,13 @@
-package com.pppp.currencies.data.repository
+package com.pppp.data.data
 
-import com.pppp.currencies.data.network.client.Client
 import com.pppp.currencies.Repository
 import com.pppp.currencies.pokos.Currency
+import com.pppp.data.data.network.client.Client
+import com.pppp.data.data.repository.CurrencyCreator
 import io.reactivex.Observable
 import java.math.BigDecimal
 
-class RepositoryImpl(private val client: Client, private val currencyCreator: CurrencyCreator) :
+class RetrofitRepository(private val client: Client, private val currencyCreator: CurrencyCreator) :
     Repository {
 
     override fun getCurrencies(

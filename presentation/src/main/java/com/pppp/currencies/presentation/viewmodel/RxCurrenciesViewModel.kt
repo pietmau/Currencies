@@ -3,7 +3,7 @@ package com.pppp.currencies.presentation.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.pppp.currencies.pokos.Currency
-import com.pppp.currencies.data.repository.AmountCalculator
+import com.pppp.data.data.repository.AmountCalculator
 import com.pppp.currencies.usecases.GetCurrenciesUseCase
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
@@ -11,7 +11,7 @@ import java.math.BigDecimal
 
 class RxCurrenciesViewModel(
     private val currenciesUseCase: GetCurrenciesUseCase,
-    private val amountCalculator: AmountCalculator = AmountCalculator(),
+    private val amountCalculator: com.pppp.data.data.repository.AmountCalculator = com.pppp.data.data.repository.AmountCalculator(),
     private val subject: Subject<Pair<String, BigDecimal>> = BehaviorSubject.create(),
     override val currencies: MutableLiveData<List<Currency>> = MutableLiveData(),
     override val loading: MutableLiveData<Boolean> = MutableLiveData(),

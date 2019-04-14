@@ -1,4 +1,4 @@
-package com.pppp.currencies.data.repository
+package com.pppp.data.data.repository
 
 class UrlCreator(private val baseUrl: String = "https://www.countryflags.io/%s/flat/64.png") {
 

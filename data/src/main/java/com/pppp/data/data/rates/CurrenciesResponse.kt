@@ -1,4 +1,4 @@
-package com.pppp.currencies.data.rates
+package com.pppp.data.data.rates
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName

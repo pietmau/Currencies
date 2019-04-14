@@ -1,4 +1,4 @@
-package com.pppp.currencies.data.network.api
+package com.pppp.data.data.network.api
 
 import io.reactivex.Flowable
 import retrofit2.http.GET

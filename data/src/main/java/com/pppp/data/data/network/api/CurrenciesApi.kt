@@ -1,6 +1,6 @@
-package com.pppp.currencies.data.network.api
+package com.pppp.data.data.network.api
 
-import com.pppp.currencies.data.rates.CurrenciesResponse
+import com.pppp.data.data.rates.CurrenciesResponse
 import io.reactivex.Flowable
 import retrofit2.http.GET
 import retrofit2.http.Query

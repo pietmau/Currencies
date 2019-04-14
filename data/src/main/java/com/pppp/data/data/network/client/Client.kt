@@ -1,6 +1,6 @@
-package com.pppp.currencies.data.network.client
+package com.pppp.data.data.network.client
 
-import com.pppp.currencies.data.rates.CurrenciesResponse
+import com.pppp.data.data.rates.CurrenciesResponse
 import io.reactivex.Observable
 
 interface Client {

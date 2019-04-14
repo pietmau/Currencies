@@ -1,7 +1,7 @@
-package com.pppp.currencies.data.repository
+package com.pppp.data.data.repository
 
 import com.pppp.currencies.pokos.Currency
-import com.pppp.currencies.data.rates.CurrenciesResponse
+import com.pppp.data.data.rates.CurrenciesResponse
 import java.math.BigDecimal
 
 interface CurrencyCreator {

@@ -1,8 +1,8 @@
-package com.pppp.currencies.data.network.client
+package com.pppp.data.data.network.client
 
-import com.pppp.currencies.data.network.api.CurrenciesApi
-import com.pppp.currencies.data.network.api.NamesApi
-import com.pppp.currencies.data.rates.CurrenciesResponse
+import com.pppp.data.data.network.api.CurrenciesApi
+import com.pppp.data.data.network.api.NamesApi
+import com.pppp.data.data.rates.CurrenciesResponse
 import io.reactivex.Observable
 import okhttp3.Cache
 import okhttp3.OkHttpClient

@@ -2,7 +2,6 @@ package com.pppp.currencies.presentation.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import com.pppp.currencies.pokos.Currency
-import com.pppp.currencies.data.repository.AmountCalculator
 import com.pppp.currencies.usecases.GetCurrenciesUseCase
 import io.mockk.*
 import io.reactivex.subjects.Subject
@@ -17,7 +16,7 @@ private const val SYMBOL = "ITL"
 @ExtendWith(InstantExecutorExtension::class)
 internal class RxCurrenciesViewModelTest {
     private val useCase: GetCurrenciesUseCase = mockk(relaxed = true)
-    private val amountCalculator: AmountCalculator = mockk()
+    private val amountCalculator: com.pppp.data.data.repository.AmountCalculator = mockk()
     private lateinit var viewModel: RxCurrenciesViewModel
     private val subject: Subject<Pair<String, BigDecimal>> = mockk(relaxed = true)
     private val pair = slot<Pair<String, BigDecimal>>()
