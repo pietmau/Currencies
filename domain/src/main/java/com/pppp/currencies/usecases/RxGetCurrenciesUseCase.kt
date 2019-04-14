@@ -18,7 +18,9 @@ class RxGetCurrenciesUseCase(
     private val mainScheduler: Scheduler,
     private val ioScheduler: Scheduler = Schedulers.io(),
     private val subscriptions: CompositeDisposable = CompositeDisposable(),
-    numberOfAttempts: Int = 10
+    numberOfAttempts: Int = 10,
+    private val timeoutInSecs: Long = 3,
+    private val seconds: Observable<Long> = Observable.interval(1, TimeUnit.SECONDS)
 ) :
     GetCurrenciesUseCase {
 
@@ -27,10 +29,7 @@ class RxGetCurrenciesUseCase(
         success: ((List<Currency>) -> Unit)?,
         failure: ((Throwable) -> Unit)?
     ) {
-
         val currencies = baseCurrency.startWith(Pair(DEFAULT_CURRENCY, BigDecimal(1)))
-
-        val seconds = Observable.interval(1, TimeUnit.SECONDS)
 
         val subscription = seconds
             .withLatestFrom(currencies, function)
@@ -38,15 +37,15 @@ class RxGetCurrenciesUseCase(
             .flatMap { (baseSymbol, baseAmount) ->
                 repository.getCurrencies(baseSymbol, baseAmount)
             }
-            .timeout(2, TimeUnit.SECONDS)
+            .timeout(timeoutInSecs, TimeUnit.SECONDS)
             .retryWhen { errors ->
                 errors.zipWith(
                     numberOfAttempts,
                     BiFunction<Throwable, Int, Int> { error, attempt ->
-                        failure?.invoke(createMessage(error, attempt))
+                        failure?.invoke(createMessage(error, attempt, timeoutInSecs))
                         attempt
                     }
-                ).flatMap(::timer)
+                ).flatMap { Timer().run(backOffTime(it)) }
             }
             .observeOn(mainScheduler)
             .subscribe({
@@ -61,18 +60,17 @@ class RxGetCurrenciesUseCase(
         subscriptions.clear()
     }
 
-    private fun createMessage(error: Throwable, attempt: Int) =
-        Exception("ERROR: ${error.localizedMessage} Will retry in ${backOffTime(attempt)} seconds")
+    private fun createMessage(error: Throwable, attempt: Int, timeout: Long) =
+        Exception(
+            "ERROR: ${error.localizedMessage} Will retry in ${backOffTime(attempt)} seconds"
+        )
 
     private val function =
         BiFunction<Long?, Pair<String, BigDecimal>?, Pair<String, BigDecimal>> { _: Long, pair: Pair<String, BigDecimal> -> pair }
 
-    private fun timer(attempt: Int): Observable<Long> =
-        Observable.timer(backOffTime(attempt).toLong(), TimeUnit.SECONDS)
-
-    private fun backOffTime(attempt: Int) = Math.pow(2.toDouble(), attempt.toDouble())
-
     private val numberOfAttempts = Observable.range(1, numberOfAttempts)
-
 }
+
+fun backOffTime(attempt: Int) = Math.pow(2.toDouble(), attempt.toDouble()).toLong()
+
 

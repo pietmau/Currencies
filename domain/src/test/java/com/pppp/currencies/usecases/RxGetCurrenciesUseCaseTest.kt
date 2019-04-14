@@ -7,9 +7,11 @@ import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import junit.framework.Assert
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
+import java.util.concurrent.atomic.AtomicInteger
 
 private const val GBP = "GBP"
 
@@ -74,7 +76,7 @@ internal class RxGetCurrenciesUseCaseTest {
         // THEN
         // unfortunately we must do this, because the emission is every 1 second
         Thread.sleep(1100)
-        verify { failure(ofType<Exception>()) }
+        verify { failure(any()) }
         confirmVerified(failure)
     }
 
@@ -86,14 +88,28 @@ internal class RxGetCurrenciesUseCaseTest {
         usecase.subscribe(Observable.just(Pair(GBP, BigDecimal(1))))
         // THEN
         // unfortunately we must do this, because the emission is every 1 second
-        Thread.sleep(4100)
-        verify(exactly = 2) { repository.getCurrencies(any(),any()) }
-        confirmVerified(failure)
+        Thread.sleep(5100)
+        verify(exactly = 2) { repository.getCurrencies(any(), any()) }
+        confirmVerified(repository)
     }
 
-    private fun throwException() {
-        val exception = Exception()
-        every { repository.getCurrencies(any(), any()) } throws exception
+
+    @Test
+    fun `when slow then times out`() {
+        // GIVEN
+        val repo = SlowRepositorySpy()
+        val usecase = RxGetCurrenciesUseCase(
+            repo,
+            mainScheduler,
+            ioScheduler,
+            subscriptions
+        )
+        // WHEN
+        usecase.subscribe(Observable.just(Pair(GBP, BigDecimal(1))))
+        // THEN
+        // unfortunately we must do this, because the emission is every 1 second
+        Thread.sleep(6800)//
+        Assert.assertEquals(2, repo.count.get())
     }
 
     @Test
@@ -111,5 +127,26 @@ internal class RxGetCurrenciesUseCaseTest {
         // WHEN
         usecase.subscribe(Observable.just(Pair(GBP, BigDecimal(1))), success)
         return emptyList
+    }
+
+    private fun throwException() {
+        val exception = Exception()
+        every { repository.getCurrencies(any(), any()) } throws exception
+    }
+}
+
+class SlowRepositorySpy : Repository {
+    val count = AtomicInteger(0)
+
+    override fun getCurrencies(
+        baseSymbol: String,
+        basAmount: BigDecimal
+    ): Observable<List<Currency>> {
+        count.incrementAndGet()
+        try {
+            Thread.sleep(31000)
+        } catch (exception: Exception) {
+        }
+        return Observable.just(emptyList())
     }
 }
