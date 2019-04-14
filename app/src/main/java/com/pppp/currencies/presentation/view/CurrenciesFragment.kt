@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.snackbar.Snackbar.LENGTH_LONG
 import com.pppp.currencies.R
 import com.pppp.currencies.app.CurrencyApp
 import com.pppp.currencies.app.di.ActivityModule
@@ -38,6 +40,9 @@ class CurrenciesFragment : Fragment() {
         viewModel.currencies.observe(requireActivity(), Observer(recycler::updateRates))
         viewModel.loading.observe(requireActivity(), Observer() { show ->
             progress.visibility = if (show) VISIBLE else GONE
+        })
+        viewModel.errors.observe(requireActivity(), Observer() { exception ->
+            Snackbar.make(recycler, exception.localizedMessage, LENGTH_LONG).show()
         })
     }
 

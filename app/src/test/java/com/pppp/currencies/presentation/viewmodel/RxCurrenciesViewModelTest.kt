@@ -25,10 +25,12 @@ internal class RxCurrenciesViewModelTest {
     private val currencies: MutableLiveData<List<Currency>> = mockk(relaxed = true)
     private val loading: MutableLiveData<Boolean> = mockk(relaxed = true)
     private val currency: Currency = mockk()
+    private val errors: MutableLiveData<Throwable> = mockk(relaxed = true)
 
     @BeforeEach
     fun setUp() {
-        viewModel = RxCurrenciesViewModel(useCase, amountCalculator, subject, currencies, loading)
+        viewModel =
+            RxCurrenciesViewModel(useCase, amountCalculator, subject, currencies, loading, errors)
     }
 
     @Test

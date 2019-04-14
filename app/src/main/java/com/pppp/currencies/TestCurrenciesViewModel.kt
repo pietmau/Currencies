@@ -7,7 +7,8 @@ import java.math.BigDecimal
 
 class TestCurrenciesViewModel(
     override val currencies: MutableLiveData<List<Currency>>,
-    override val loading: MutableLiveData<Boolean>
+    override val loading: MutableLiveData<Boolean>,
+    override val errors: MutableLiveData<Throwable> = MutableLiveData()
 ) :
     CurrenciesViewModel {
 

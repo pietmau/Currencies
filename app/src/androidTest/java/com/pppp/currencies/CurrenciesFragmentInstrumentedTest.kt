@@ -5,6 +5,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -23,6 +24,7 @@ private const val ITL = "ITL"
 private const val GBP = "GBP"
 private const val COUNTRY = "some_country"
 private const val UK = "uk"
+private const val ERROR = "error"
 
 @RunWith(AndroidJUnit4::class)
 class CurrenciesFragmentInstrumentedTest {
@@ -30,6 +32,7 @@ class CurrenciesFragmentInstrumentedTest {
     private val itl = Currency(ITL, "", BigDecimal(1), COUNTRY, "www")
     private val gbp = Currency(GBP, "", BigDecimal(2), UK, "www")
     private val loading: MutableLiveData<Boolean> = MutableLiveData()
+    private val errors: MutableLiveData<Throwable> = MutableLiveData()
 
     @get:Rule
     var activityRule: ActivityTestRule<CurrenciesActivity> = object :
@@ -37,7 +40,7 @@ class CurrenciesFragmentInstrumentedTest {
         override fun beforeActivityLaunched() {
             val instrumentation = InstrumentationRegistry.getInstrumentation()
             val app = instrumentation.targetContext.applicationContext as CurrencyApp
-            val viewmodel = TestCurrenciesViewModel(currencies, loading)
+            val viewmodel = TestCurrenciesViewModel(currencies, loading, errors)
             val builder = DaggerTestAppComponent.builder()
             app.component = builder.testAppModule(TestAppModule(viewmodel)).build()
         }
@@ -58,7 +61,7 @@ class CurrenciesFragmentInstrumentedTest {
 
     @Test
     fun when_receives_currencies_then_shows() {
-        //WHEN
+        // WHEN
         currencies.postValue(listOf(itl, gbp))
         // THEN
         checkItemAtPosition()
@@ -66,7 +69,7 @@ class CurrenciesFragmentInstrumentedTest {
 
     @Test
     fun when_updates_currencies_then_shows() {
-        //WHEN
+        // WHEN
         currencies.postValue(listOf(itl, gbp))
         checkItemAtPosition()
         checkItemAtPosition(1, GBP, UK, "2.0000")
@@ -84,7 +87,7 @@ class CurrenciesFragmentInstrumentedTest {
 
     @Test
     fun when_click_then_moves_to_top() {
-        //WHEN
+        // WHEN
         currencies.postValue(listOf(itl, gbp))
         // THEN
         checkItemAtPosition()
@@ -105,6 +108,15 @@ class CurrenciesFragmentInstrumentedTest {
         onView(withId(R.id.recycler)).check(matches(atPosition(1, not(editTextHasFocus()))))
         onView(withId(R.id.recycler)).check(matches(atPosition(0, editTextHasFocus())))
     }
+
+    @Test
+    fun when_error_then_shows_error() {
+        // WHEN
+        errors.postValue(Exception(ERROR))
+        // THEN
+        onView(withText(ERROR)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+    }
+
 
     private fun checkItemAtPosition(
         position: Int = 0,

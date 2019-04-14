@@ -10,6 +10,8 @@ interface CurrenciesViewModel {
 
     val loading: MutableLiveData<Boolean>
 
+    val errors: MutableLiveData<Throwable>
+
     fun changeBase(symbol: String, amount: BigDecimal)
 
     fun subscribe()
