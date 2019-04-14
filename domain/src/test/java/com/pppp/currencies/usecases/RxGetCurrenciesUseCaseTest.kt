@@ -7,7 +7,7 @@ import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import junit.framework.Assert
+import junit.framework.Assert.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
@@ -18,20 +18,23 @@ private const val GBP = "GBP"
 internal class RxGetCurrenciesUseCaseTest {
     private val repository: Repository = mockk()
     private val mainScheduler: Scheduler = Schedulers.trampoline()
-    private val ioScheduler: Scheduler = Schedulers.trampoline()
     private val subscriptions: CompositeDisposable = mockk(relaxed = true)
     private lateinit var usecase: RxGetCurrenciesUseCase
     private val success: (List<Currency>) -> Unit = mockk(relaxed = true)
     private val failure: (Throwable) -> Unit = mockk(relaxed = true)
-    private val slot = slot<Throwable>()
 
     @BeforeEach
     internal fun setUp() {
         usecase = RxGetCurrenciesUseCase(
             repository,
             mainScheduler,
-            ioScheduler,
-            subscriptions
+            mainScheduler,
+            subscriptions,
+            numberOfAttempts = 2,
+            seconds = Observable.range(1, 4).map { it.toLong() },
+            timer = object : CurrenciesTimer() {
+                override fun run(time: Long) = Observable.range(1, 4).map { it.toLong() }
+            }
         )
         every { success(any()) } just Runs
     }
@@ -51,7 +54,6 @@ internal class RxGetCurrenciesUseCaseTest {
         val emptyList = subscribe()
         // THEN
         // unfortunately we must do this, because the emission is every 1 second
-        Thread.sleep(1100)
         verify { success(emptyList) }
         confirmVerified(success)
     }
@@ -61,8 +63,6 @@ internal class RxGetCurrenciesUseCaseTest {
         // GIVEN
         val emptyList = subscribe()
         // THEN
-        // unfortunately we must do this, because the emission is every 1 second
-        Thread.sleep(2100)
         verify(atLeast = 2) { success(emptyList) }
         confirmVerified(success)
     }
@@ -74,8 +74,6 @@ internal class RxGetCurrenciesUseCaseTest {
         // WHEN
         usecase.subscribe(Observable.just(Pair(GBP, BigDecimal(1))), failure = failure)
         // THEN
-        // unfortunately we must do this, because the emission is every 1 second
-        Thread.sleep(1100)
         verify { failure(any()) }
         confirmVerified(failure)
     }
@@ -87,12 +85,9 @@ internal class RxGetCurrenciesUseCaseTest {
         // WHEN
         usecase.subscribe(Observable.just(Pair(GBP, BigDecimal(1))))
         // THEN
-        // unfortunately we must do this, because the emission is every 1 second
-        Thread.sleep(5100)
         verify(exactly = 2) { repository.getCurrencies(any(), any()) }
         confirmVerified(repository)
     }
-
 
     @Test
     fun `when slow then times out`() {
@@ -101,15 +96,18 @@ internal class RxGetCurrenciesUseCaseTest {
         val usecase = RxGetCurrenciesUseCase(
             repo,
             mainScheduler,
-            ioScheduler,
-            subscriptions
+            mainScheduler,
+            subscriptions,
+            numberOfAttempts = 2,
+            seconds = Observable.range(1, 4).map { it.toLong() },
+            timer = object : CurrenciesTimer() {
+                override fun run(time: Long) = Observable.range(1, 4).map { it.toLong() }
+            }
         )
         // WHEN
         usecase.subscribe(Observable.just(Pair(GBP, BigDecimal(1))))
         // THEN
-        // unfortunately we must do this, because the emission is every 1 second
-        Thread.sleep(6800)//
-        Assert.assertEquals(2, repo.count.get())
+        assertEquals(2, repo.count.get())
     }
 
     @Test
@@ -144,7 +142,7 @@ class SlowRepositorySpy : Repository {
     ): Observable<List<Currency>> {
         count.incrementAndGet()
         try {
-            Thread.sleep(31000)
+            Thread.sleep(3100)
         } catch (exception: Exception) {
         }
         return Observable.just(emptyList())

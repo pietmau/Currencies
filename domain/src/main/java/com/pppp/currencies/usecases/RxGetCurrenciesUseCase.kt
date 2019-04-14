@@ -20,9 +20,15 @@ class RxGetCurrenciesUseCase(
     private val subscriptions: CompositeDisposable = CompositeDisposable(),
     numberOfAttempts: Int = 10,
     private val timeoutInSecs: Long = 3,
-    private val seconds: Observable<Long> = Observable.interval(1, TimeUnit.SECONDS)
+    private val seconds: Observable<Long> = Observable.interval(1, TimeUnit.SECONDS),
+    private val timer: CurrenciesTimer = CurrenciesTimer()
 ) :
     GetCurrenciesUseCase {
+
+    private val function =
+        BiFunction<Long?, Pair<String, BigDecimal>?, Pair<String, BigDecimal>> { _: Long, pair: Pair<String, BigDecimal> -> pair }
+
+    private val numberOfAttempts = Observable.range(1, numberOfAttempts)
 
     override fun subscribe(
         baseCurrency: Observable<Pair<String, BigDecimal>>,
@@ -42,10 +48,10 @@ class RxGetCurrenciesUseCase(
                 errors.zipWith(
                     numberOfAttempts,
                     BiFunction<Throwable, Int, Int> { error, attempt ->
-                        failure?.invoke(createMessage(error, attempt, timeoutInSecs))
+                        failure?.invoke(createMessage(error, attempt))
                         attempt
                     }
-                ).flatMap { Timer().run(backOffTime(it)) }
+                ).flatMap { timer.run(backOffTime(it)) }
             }
             .observeOn(mainScheduler)
             .subscribe({
@@ -60,17 +66,13 @@ class RxGetCurrenciesUseCase(
         subscriptions.clear()
     }
 
-    private fun createMessage(error: Throwable, attempt: Int, timeout: Long) =
+    private fun createMessage(error: Throwable, attempt: Int) =
         Exception(
             "ERROR: ${error.localizedMessage} Will retry in ${backOffTime(attempt)} seconds"
         )
 
-    private val function =
-        BiFunction<Long?, Pair<String, BigDecimal>?, Pair<String, BigDecimal>> { _: Long, pair: Pair<String, BigDecimal> -> pair }
-
-    private val numberOfAttempts = Observable.range(1, numberOfAttempts)
+    private fun backOffTime(attempt: Int) = Math.pow(2.toDouble(), attempt.toDouble()).toLong()
 }
 
-fun backOffTime(attempt: Int) = Math.pow(2.toDouble(), attempt.toDouble()).toLong()
 
 
