@@ -4,9 +4,9 @@
 - USE A SERVICE!
 - Fix edditezt to get only valid numbers
 - FIX NAMES (currency not rates)
--  error/loading/complete
 - implement Retry!!!
 - modularize
 - bettern aname for reposoiyty
 - use retrofit converter
 - colori!
+- more test

@@ -87,6 +87,15 @@ internal class RxCurrenciesViewModelTest {
         verify { useCase.unSubscribe() }
     }
 
+    @Test
+    fun `when errors then shows error`() {
+        // WHEN
+        getsData(viewModel)
+        // THEN
+        verify { loading.postValue(false) }
+    }
+
+
     private fun changeBase(): String {
         every { amountCalculator.parseAmount(any()) } returns BigDecimal(1)
         val baseAmount = "1"

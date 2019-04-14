@@ -11,6 +11,7 @@ import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 
+
 const val DEFAULT_CURRENCY = "EUR"
 
 class RxGetCurrenciesUseCase(
@@ -34,6 +35,14 @@ class RxGetCurrenciesUseCase(
             .flatMap { (baseSymbol, baseAmount) ->
                 repository.getCurrencies(baseSymbol, baseAmount)
             }
+            .retryWhen { errors ->
+                errors.zipWith(
+                    attempts,
+                    BiFunction<Throwable, Int, Int> { error, attempt ->
+                        attempt
+                    }
+                ).flatMap(::timer)
+            }
             .observeOn(mainScheduler)
             .subscribe({
                 success?.invoke(it)
@@ -49,5 +58,11 @@ class RxGetCurrenciesUseCase(
 
     private val biFunction =
         BiFunction<Long?, Pair<String, BigDecimal>?, Pair<String, BigDecimal>> { _: Long, pair: Pair<String, BigDecimal> -> pair }
+
+
+    private fun timer(attempt: Int) =
+        Observable.timer(Math.pow(2.toDouble(), attempt.toDouble()).toLong(), TimeUnit.SECONDS)
+
+    private val attempts = Observable.range(1, 10)
 }
 
