@@ -1,6 +1,6 @@
 package com.pppp.currencies.app.di
 
-import androidx.fragment.app.FragmentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -15,10 +15,14 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class ProdCurrenciesModule(private val activity: FragmentActivity) : CurrenciesModule {
+class ProdCurrenciesModule(
+) : CurrenciesModule {
 
     @Provides
-    fun providesViewModel(factory: ViewModelProvider.Factory): CurrenciesViewModel =
+    fun providesViewModel(
+        factory: ViewModelProvider.Factory,
+        activity: AppCompatActivity
+    ): CurrenciesViewModel =
         ViewModelProviders.of(activity, factory).get(RxCurrenciesViewModel::class.java)
 
     @Provides
@@ -30,7 +34,8 @@ class ProdCurrenciesModule(private val activity: FragmentActivity) : CurrenciesM
         RepositoryImpl(client, CurrencyCreatorImpl(UrlCreator(), AmountCalculator()))
 
     @Provides
-    internal fun provideClient(): Client = RetrofitClient(cacheDirectory = activity.cacheDir)
+    internal fun provideClient(activity: AppCompatActivity): Client =
+        RetrofitClient(cacheDirectory = activity.cacheDir)
 
     @Provides
     internal fun providefactory(uscase: GetCurrenciesUseCase): ViewModelProvider.Factory =

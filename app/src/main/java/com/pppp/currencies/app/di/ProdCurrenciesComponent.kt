@@ -6,7 +6,7 @@ import dagger.Subcomponent
 /**
  * Only so that we can swap dependencies during Espresso tests.
  */
-@Subcomponent(modules = [ProdCurrenciesModule::class])
+@Subcomponent(modules = [ActivityModule::class, ProdCurrenciesModule::class])
 interface ProdCurrenciesComponent : CurrenciesComponent {
     override fun inject(currenciesFragment: CurrenciesFragment)
 }
