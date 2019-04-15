@@ -28,7 +28,7 @@ The project is composed of three modules:
 **Domain** does not depend on any other module.
 
 ## Tests
-There are Unit tests (**Junit 5**) and **Espresso** tests in the respective directories:
+There are unit tests (**Junit 5**) and **Espresso** tests in the respective directories:
 - some unit tests in all modules, in the respective directories;
 - some Espresso test in **presentation**
 
