@@ -6,6 +6,7 @@ import io.mockk.*
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
 import junit.framework.Assert.assertEquals
@@ -28,11 +29,10 @@ internal class RxGetCurrenciesUseCaseTest {
 
     @BeforeEach
     internal fun setUp() {
+        RxJavaPlugins.setComputationSchedulerHandler { testScheduler }
         usecase = RxGetCurrenciesUseCase(
             repository,
             mainScheduler,
-            mainScheduler,
-            testScheduler,
             subscriptions,
             numberOfAttempts = 2
         )
@@ -99,14 +99,12 @@ internal class RxGetCurrenciesUseCaseTest {
         val usecase = RxGetCurrenciesUseCase(
             repo,
             mainScheduler,
-            mainScheduler,
-            testScheduler,
             subscriptions,
             numberOfAttempts = 2
         )
         // WHEN
         usecase.subscribe(Observable.just(Pair(GBP, BigDecimal(1))))
-        testScheduler.advanceTimeBy(4, TimeUnit.SECONDS)
+        testScheduler.advanceTimeBy(2, TimeUnit.SECONDS)
         // THEN
         assertEquals(2, repo.count.get())
     }

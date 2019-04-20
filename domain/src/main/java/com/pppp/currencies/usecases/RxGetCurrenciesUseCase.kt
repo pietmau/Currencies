@@ -6,7 +6,6 @@ import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
-import io.reactivex.schedulers.Schedulers
 import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 
@@ -16,8 +15,6 @@ const val DEFAULT_CURRENCY = "EUR"
 class RxGetCurrenciesUseCase(
     private val repository: Repository,
     private val mainScheduler: Scheduler,
-    private val ioScheduler: Scheduler = Schedulers.io(),
-    private val computationScheduler: Scheduler = Schedulers.computation(),
     private val subscriptions: CompositeDisposable = CompositeDisposable(),
     numberOfAttempts: Int = 10,
     private val timeoutInSecs: Long = 3
@@ -25,7 +22,7 @@ class RxGetCurrenciesUseCase(
     GetCurrenciesUseCase {
 
     private val seconds: Observable<Long> =
-        Observable.interval(1, TimeUnit.SECONDS, computationScheduler)
+        Observable.interval(1, TimeUnit.SECONDS)
 
     private val function =
         BiFunction<Long?, Pair<String, BigDecimal>?, Pair<String, BigDecimal>> { _: Long, pair: Pair<String, BigDecimal> -> pair }
@@ -41,7 +38,6 @@ class RxGetCurrenciesUseCase(
 
         val subscription = seconds
             .withLatestFrom(currencies, function)
-            .subscribeOn(ioScheduler)
             .flatMap { (baseSymbol, baseAmount) ->
                 repository.getCurrencies(baseSymbol, baseAmount)
             }
@@ -56,8 +52,7 @@ class RxGetCurrenciesUseCase(
                 ).flatMap {
                     Observable.timer(
                         backOffTime(it).toLong(),
-                        TimeUnit.SECONDS,
-                        computationScheduler
+                        TimeUnit.SECONDS
                     )
                 }
             }
