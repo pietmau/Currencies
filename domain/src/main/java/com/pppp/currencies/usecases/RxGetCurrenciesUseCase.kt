@@ -17,13 +17,15 @@ class RxGetCurrenciesUseCase(
     private val repository: Repository,
     private val mainScheduler: Scheduler,
     private val ioScheduler: Scheduler = Schedulers.io(),
+    private val computationScheduler: Scheduler = Schedulers.computation(),
     private val subscriptions: CompositeDisposable = CompositeDisposable(),
     numberOfAttempts: Int = 10,
-    private val timeoutInSecs: Long = 3,
-    private val seconds: Observable<Long> = Observable.interval(1, TimeUnit.SECONDS),
-    private val timer: CurrenciesTimer = CurrenciesTimer()
+    private val timeoutInSecs: Long = 3
 ) :
     GetCurrenciesUseCase {
+
+    private val seconds: Observable<Long> =
+        Observable.interval(1, TimeUnit.SECONDS, computationScheduler)
 
     private val function =
         BiFunction<Long?, Pair<String, BigDecimal>?, Pair<String, BigDecimal>> { _: Long, pair: Pair<String, BigDecimal> -> pair }
@@ -51,7 +53,13 @@ class RxGetCurrenciesUseCase(
                         failure?.invoke(createMessage(error, attempt))
                         attempt
                     }
-                ).flatMap { timer.run(backOffTime(it)) }
+                ).flatMap {
+                    Observable.timer(
+                        backOffTime(it).toLong(),
+                        TimeUnit.SECONDS,
+                        computationScheduler
+                    )
+                }
             }
             .observeOn(mainScheduler)
             .subscribe({

@@ -7,10 +7,12 @@ import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.schedulers.TestScheduler
 import junit.framework.Assert.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 
 private const val GBP = "GBP"
@@ -22,6 +24,7 @@ internal class RxGetCurrenciesUseCaseTest {
     private lateinit var usecase: RxGetCurrenciesUseCase
     private val success: (List<Currency>) -> Unit = mockk(relaxed = true)
     private val failure: (Throwable) -> Unit = mockk(relaxed = true)
+    private val testScheduler = TestScheduler()
 
     @BeforeEach
     internal fun setUp() {
@@ -29,12 +32,9 @@ internal class RxGetCurrenciesUseCaseTest {
             repository,
             mainScheduler,
             mainScheduler,
+            testScheduler,
             subscriptions,
-            numberOfAttempts = 2,
-            seconds = Observable.range(1, 4).map { it.toLong() },
-            timer = object : CurrenciesTimer() {
-                override fun run(time: Long) = Observable.range(1, 4).map { it.toLong() }
-            }
+            numberOfAttempts = 2
         )
         every { success(any()) } just Runs
     }
@@ -52,16 +52,17 @@ internal class RxGetCurrenciesUseCaseTest {
     fun `when success then success`() {
         // GIVEN
         val emptyList = subscribe()
+        testScheduler.advanceTimeBy(3, TimeUnit.SECONDS)
         // THEN
-        // unfortunately we must do this, because the emission is every 1 second
         verify { success(emptyList) }
         confirmVerified(success)
     }
 
     @Test
     fun `emits multiple times`() {
-        // GIVEN
+        // WHEN
         val emptyList = subscribe()
+        testScheduler.advanceTimeBy(3, TimeUnit.SECONDS)
         // THEN
         verify(atLeast = 2) { success(emptyList) }
         confirmVerified(success)
@@ -73,6 +74,7 @@ internal class RxGetCurrenciesUseCaseTest {
         throwException()
         // WHEN
         usecase.subscribe(Observable.just(Pair(GBP, BigDecimal(1))), failure = failure)
+        testScheduler.advanceTimeBy(3, TimeUnit.SECONDS)
         // THEN
         verify { failure(any()) }
         confirmVerified(failure)
@@ -84,6 +86,7 @@ internal class RxGetCurrenciesUseCaseTest {
         throwException()
         // WHEN
         usecase.subscribe(Observable.just(Pair(GBP, BigDecimal(1))))
+        testScheduler.advanceTimeBy(4, TimeUnit.SECONDS)
         // THEN
         verify(exactly = 2) { repository.getCurrencies(any(), any()) }
         confirmVerified(repository)
@@ -97,15 +100,13 @@ internal class RxGetCurrenciesUseCaseTest {
             repo,
             mainScheduler,
             mainScheduler,
+            testScheduler,
             subscriptions,
-            numberOfAttempts = 2,
-            seconds = Observable.range(1, 4).map { it.toLong() },
-            timer = object : CurrenciesTimer() {
-                override fun run(time: Long) = Observable.range(1, 4).map { it.toLong() }
-            }
+            numberOfAttempts = 2
         )
         // WHEN
         usecase.subscribe(Observable.just(Pair(GBP, BigDecimal(1))))
+        testScheduler.advanceTimeBy(4, TimeUnit.SECONDS)
         // THEN
         assertEquals(2, repo.count.get())
     }
